@@ -4,16 +4,14 @@
  *  Created on: 24 abr. 2020
  *      Author: IbonZalbide
  */
+#include <drivers/mcu.h>
 #include <msp430.h>
 #include <stdint.h>
-#include "mcu.h"
+#include <global_variables.h>
 
 // Private routine prototypes
 void Software_Trim();
 #define MCLK_FREQ_MHZ 8                     // MCLK = 8MHz
-
-// Shared flags
-volatile uint8_t fSystick=0;
 
 // MCU setup
 void setup_mcu()

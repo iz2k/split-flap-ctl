@@ -4,16 +4,17 @@
  *  Created on: 24 abr. 2020
  *      Author: IbonZalbide
  */
-
 #include <msp430.h> 
-#include <stdint.h>
-#include "hal/mcu.h"
-#include "hal/i2c-slave.h"
-#include "hal/ir-sensor.h"
-#include "hal/stepper.h"
+#include <typedefs.h>
+#include <constants.h>
+#include <drivers/mcu.h>
+#include <drivers/smbus-slave.h>
+#include <drivers/ir-sensor.h>
+#include <drivers/stepper.h>
+#include <drivers/adc.h>
 
-// External flags
-extern uint8_t fSystick;
+#define VAR_DECLS
+#include <global_variables.h>
 
 int main(void)
 {
@@ -21,10 +22,15 @@ int main(void)
     setup_mcu();
     setup_systick();
     setup_stepper();
+    setup_smbus_slave();
+
+    init_smbus_slave(adc_get_role());
 
     unlock_GPIOs();
 
     __bis_SR_register(GIE);
+
+    // Get ROLE with ADC
 
     while(1)
     {
