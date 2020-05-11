@@ -4,9 +4,9 @@
  *  Created on: 24 abr. 2020
  *      Author: IbonZalbide
  */
+#include <drivers/stepper.h>
 #include <msp430.h>
 #include <stdint.h>
-#include "stepper.h"
 
 const uint8_t stepmtx [8][4] =
 {

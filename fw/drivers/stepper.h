@@ -5,8 +5,8 @@
  *      Author: IbonZalbide
  */
 
-#ifndef HAL_STEPPER_H_
-#define HAL_STEPPER_H_
+#ifndef DRIVERS_STEPPER_H_
+#define DRIVERS_STEPPER_H_
 
 // STEPPER  CTL1:P2.0, CTL2:P1.6, CTL3:P1.5, CTL4:P1.4
 #define STP_1_PDIR  P2DIR
@@ -29,4 +29,4 @@ void setup_stepper();
 void stepper_move();
 void stepper_stop();
 
-#endif /* HAL_STEPPER_H_ */
+#endif /* DRIVERS_STEPPER_H_ */
