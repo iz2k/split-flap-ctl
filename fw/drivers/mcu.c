@@ -62,7 +62,7 @@ __interrupt void RTC_ISR(void)
     {
         case  RTCIV_NONE:   break;          // No interrupt
         case  RTCIV_RTCIF:                  // RTC Overflow
-            fSystick = 1;
+            fSystick++;
             break;
         default: break;
     }

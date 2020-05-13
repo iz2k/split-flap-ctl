@@ -42,7 +42,7 @@ _DECL uint8_t fSystick  _INIT(0);
 
 _DECL const uint16_t  reg_fw_version    _INIT(0x0106);
 _DECL uint16_t  reg_ir_threshold        _INIT(0);
-_DECL uint16_t  reg_digit_code          _INIT(0);
+_DECL uint8_t  reg_digit_code          _INIT(0);
 // SMBUS FLAGS
 _DECL smbus_registers  smbus_reg  _INIT(SMB_NONE);
 _DECL smbus_operation  smbus_op   _INIT(SMB_OP_NONE);

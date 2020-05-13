@@ -18,6 +18,7 @@
 
 int main(void)
 {
+    uint8_t current_digit_code = 0;
 
     setup_mcu();
     setup_systick();
@@ -34,13 +35,15 @@ int main(void)
 
     while(1)
     {
-        if (fSystick)
+        if (fSystick>0)
         {
             // Deassert flag
             fSystick=0;
 
-            // Continuous stepper move for testing
-            stepper_move();
+            if (current_digit_code != reg_digit_code){
+                // Continuous stepper move for testing
+                stepper_move();
+            }
         }
     }
 }
