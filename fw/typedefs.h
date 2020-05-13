@@ -10,7 +10,8 @@ typedef enum {
 typedef enum {
     ROLE_HOURS      = 0,
     ROLE_MINUTES    = 1,
-    ROLE_WEATHER    = 2
+    ROLE_WEATHER    = 2,
+    ROLE_ERROR      = 255
 } split_flap_role;
 
 typedef enum {

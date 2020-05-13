@@ -38,11 +38,15 @@ _DECL [standard variable declaration];
 // TIMER generated SysTick flag
 _DECL uint8_t fSystick  _INIT(0);
 
-// SMBUS VOLATILE REGISTERS
+// ADC results
+_DECL uint16_t flap_val  _INIT(0);
+_DECL uint16_t sync_val  _INIT(0);
 
+// SMBUS VOLATILE REGISTERS
 _DECL const uint16_t  reg_fw_version    _INIT(0x0106);
 _DECL uint16_t  reg_ir_threshold        _INIT(0);
 _DECL uint8_t  reg_digit_code          _INIT(0);
+
 // SMBUS FLAGS
 _DECL smbus_registers  smbus_reg  _INIT(SMB_NONE);
 _DECL smbus_operation  smbus_op   _INIT(SMB_OP_NONE);

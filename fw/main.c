@@ -24,14 +24,17 @@ int main(void)
     setup_systick();
     setup_stepper();
     setup_smbus_slave();
-
-    init_smbus_slave(adc_get_role());
+    setup_adc();
 
     unlock_GPIOs();
 
     __bis_SR_register(GIE);
 
     // Get ROLE with ADC
+    adc_config_id();
+    init_smbus_slave(adc_get_role());
+
+    adc_config_ir();
 
     while(1)
     {
@@ -40,9 +43,13 @@ int main(void)
             // Deassert flag
             fSystick=0;
 
+            adc_meas_ir();
+
             if (current_digit_code != reg_digit_code){
                 // Continuous stepper move for testing
                 stepper_move();
+            }else{
+                stepper_stop();
             }
         }
     }
