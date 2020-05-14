@@ -25,6 +25,7 @@ int main(void)
     setup_stepper();
     setup_smbus_slave();
     setup_adc();
+    setup_ir_sensor();
 
     unlock_GPIOs();
 
@@ -35,6 +36,8 @@ int main(void)
     init_smbus_slave(adc_get_role());
 
     adc_config_ir();
+    ir_flap_enable();
+    ir_sync_enable();
 
     while(1)
     {
@@ -44,6 +47,11 @@ int main(void)
             fSystick=0;
 
             adc_meas_ir();
+
+            if (flap_val > 320)
+            {
+                flap_val=0;
+            }
 
             if (current_digit_code != reg_digit_code){
                 // Continuous stepper move for testing

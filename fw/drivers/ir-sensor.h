@@ -9,7 +9,11 @@
 #define DRIVERS_IR_SENSOR_H_
 
 
+void setup_ir_sensor();
 
-
+void ir_flap_enable();
+void ir_flap_disable();
+void ir_sync_enable();
+void ir_sync_disable();
 
 #endif /* DRIVERS_IR_SENSOR_H_ */
