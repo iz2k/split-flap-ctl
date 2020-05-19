@@ -16,7 +16,10 @@ class SMB_REGS(Enum):
 
     SMB_FW_VERSION = 1, 2, int, 0
     SMB_DIGIT_CODE = 2, 1, int, 0
-    SMB_IR_THRESHOLD = 3, 2, int, 0
+    SMB_IR_THRESHOLD_FLAP = 3, 2, int, 0
+    SMB_IR_THRESHOLD_SYNC = 4, 2, int, 0
+    SMB_DEBOUNCE_TIME = 5, 2, int, 0
+    SMB_DEPHASE_TIME = 6, 2, int, 0
 
 class SMB_OPS(Enum):
     SMB_OP_NONE = 0b00000000

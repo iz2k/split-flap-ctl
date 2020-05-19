@@ -34,6 +34,9 @@ class msp430smbus:
         print('______ MSP430-SMBUS SLAVE REPORT ______')
         print('[FW]\tv' + self.get_fw_str())
         print('[CODE] ' + str(self.regs.SMB_DIGIT_CODE.content))
-        print('[IR THRESHOLD] ' + str(self.regs.SMB_IR_THRESHOLD.content))
+        print('[IR THRESHOLD FLAP] ' + str(self.regs.SMB_IR_THRESHOLD_FLAP.content))
+        print('[IR THRESHOLD SYNC] ' + str(self.regs.SMB_IR_THRESHOLD_SYNC.content))
+        print('[DEBOUNCE TIME] ' + str(self.regs.SMB_DEBOUNCE_TIME.content))
+        print('[DEPHASE TIME] ' + str(self.regs.SMB_DEPHASE_TIME.content))
         print('----------------------------------------')
 

@@ -15,5 +15,9 @@ void ir_flap_enable();
 void ir_flap_disable();
 void ir_sync_enable();
 void ir_sync_disable();
+bool ir_sense();
+void ir_systick();
+void ir_stop_sensing();
+void ir_start_sensing();
 
 #endif /* DRIVERS_IR_SENSOR_H_ */

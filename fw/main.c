@@ -46,16 +46,14 @@ int main(void)
             // Deassert flag
             fSystick=0;
 
-            adc_meas_ir();
-
-            if (flap_val > 320)
-            {
-                flap_val=0;
-            }
+            ir_systick();
 
             if (current_digit_code != reg_digit_code){
-                // Continuous stepper move for testing
                 stepper_move();
+                {
+                    // End of detection
+                    if (flap_detected) current_digit_code++;
+                }
             }else{
                 stepper_stop();
             }
