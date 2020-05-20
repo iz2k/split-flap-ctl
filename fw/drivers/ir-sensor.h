@@ -19,5 +19,7 @@ bool ir_sense();
 void ir_systick();
 void ir_stop_sensing();
 void ir_start_sensing();
+bool ir_sensor_ready();
+float filter(float oldval, float newval, float speed);
 
 #endif /* DRIVERS_IR_SENSOR_H_ */

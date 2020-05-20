@@ -54,22 +54,22 @@ _DECL uint8_t  reg_digit_code           _INIT(0);
 #ifdef VAR_DECLS
 #pragma PERSISTENT(reg_ir_threshold_flap)
 #endif
-_DECL uint16_t  reg_ir_threshold_flap   _INIT(200);
+_DECL uint16_t  reg_ir_threshold_flap   _INIT(5);
 
 #ifdef VAR_DECLS
 #pragma PERSISTENT(reg_ir_threshold_sync)
 #endif
-_DECL uint16_t  reg_ir_threshold_sync   _INIT(200);
+_DECL uint16_t  reg_ir_threshold_sync   _INIT(5);
 
 #ifdef VAR_DECLS
 #pragma PERSISTENT(reg_debounce_time)
 #endif
-_DECL uint16_t  reg_debounce_time       _INIT(100);
+_DECL uint16_t  reg_debounce_time       _INIT(150);
 
 #ifdef VAR_DECLS
 #pragma PERSISTENT(reg_dephase_time)
 #endif
-_DECL uint16_t  reg_dephase_time       _INIT(5);
+_DECL uint16_t  reg_dephase_time       _INIT(10);
 
 
 // SMBUS FLAGS

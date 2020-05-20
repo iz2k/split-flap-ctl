@@ -21,7 +21,7 @@ void adc_config_id()
 {
     // Configure ADC10
     ADCCTL0 &= ~ADCENC;                                     // Reset configuration
-    ADCCTL0 = ADCSHT_2 | ADCON;                             // ADCON, S&H=16 ADC clks
+    ADCCTL0 = ADCSHT_10 | ADCON;                             // ADCON, S&H=16 ADC clks
     ADCCTL1 = ADCSHP;                                       // ADCCLK = MODOSC; sampling timer
     ADCCTL2 = ADCRES;                                       // 10-bit conversion results
     ADCMCTL0 = ADCINCH_7;                                   // A1 ADC input select; Vref=AVCC
@@ -31,7 +31,7 @@ void adc_config_ir()
 {
     // Configure ADC10
     ADCCTL0 &= ~ADCENC;                                     // Reset configuration
-    ADCCTL0 = ADCSHT_2 | ADCMSC | ADCON;                    // 16ADCclks, MSC, ADC ON
+    ADCCTL0 = ADCSHT_10 | ADCMSC | ADCON;                    // 16ADCclks, MSC, ADC ON
     ADCCTL1 = ADCSHP | ADCCONSEQ_1;                         // ADCCLK = MODOSC; sampling timer, single sequence
     ADCCTL2 = ADCRES;                                       // 10-bit conversion results
     ADCMCTL0 = ADCINCH_1;                                   // A0~1(EoS);

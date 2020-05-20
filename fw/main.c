@@ -17,7 +17,7 @@
 #include <global_variables.h>
 
 int main(void)
-{
+ {
     uint8_t current_digit_code = 0;
 
     setup_mcu();
@@ -35,9 +35,8 @@ int main(void)
     adc_config_id();
     init_smbus_slave(adc_get_role());
 
+    // Configure ADC for IR
     adc_config_ir();
-    ir_flap_enable();
-    ir_sync_enable();
 
     while(1)
     {
@@ -49,9 +48,10 @@ int main(void)
             ir_systick();
 
             if (current_digit_code != reg_digit_code){
-                stepper_move();
+                if (ir_sensor_ready()) stepper_move();
+                // End of detection
+                if(ir_sense())
                 {
-                    // End of detection
                     if (flap_detected) current_digit_code++;
                 }
             }else{

@@ -16,9 +16,10 @@ typedef enum {
 
 typedef enum {
     IR_STATE_OFF        = 0,
-    IR_STATE_CAL        = 1,
-    IR_STATE_ON         = 2,
-    IR_STATE_DEBOUNCE   = 3
+    IR_STATE_TURN_ON    = 1,
+    IR_STATE_CAL        = 2,
+    IR_STATE_ON         = 3,
+    IR_STATE_DEBOUNCE   = 4
 } ir_sensor_state;
 
 typedef enum {
