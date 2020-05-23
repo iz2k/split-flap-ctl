@@ -11,13 +11,16 @@
 #include <drivers/ir-sensor.h>
 #include <drivers/adc.h>
 
+#define VECTOR_LENGTH   2
 ir_sensor_state status;
-uint16_t floor_flapval, floor_syncval;
-uint16_t ir_flapval, ir_syncval;
-int16_t flapdif, syncdif;
+uint16_t flapval[VECTOR_LENGTH], syncval[VECTOR_LENGTH];
 uint8_t debounce_counter;
 uint8_t dephase_counter;
-uint8_t ac_counter;
+float slow_flapfilter, fast_flapfilter;
+float slow_syncfilter, fast_syncfilter;
+float flap_filter_dif, sync_filter_dif;
+
+float maxdif=0;
 
 void setup_ir_sensor()
 {
@@ -51,6 +54,10 @@ void ir_start_sensing()
 {
     status = IR_STATE_ON;
 
+    // Switch ON IR LEDs
+    ir_flap_enable();
+    ir_sync_enable();
+
     // Reset detection flags
     flap_detected=false;
     sync_detected=false;
@@ -59,7 +66,6 @@ void ir_start_sensing()
     dephase_counter=0;
     debounce_counter=0;
 
-    ac_counter=0;
 }
 
 void ir_systick()
@@ -76,52 +82,68 @@ void ir_systick()
 
 bool ir_sense()
 {
+    uint8_t i;
+
     switch(status)
     {
     case IR_STATE_OFF:
         // Discard ADC data and switch IR sensor ON
         ir_start_sensing();
         break;
+    case IR_STATE_CAL:
+        // Get value
+        adc_meas_ir();
+        // Initialize vector with first value
+        for(i=0;i<VECTOR_LENGTH;i++)
+        {
+            flapval[i]=flap_val;
+            syncval[i]=sync_val;
+        }
+        slow_flapfilter=flap_val;
+        fast_flapfilter=flap_val;
+        slow_syncfilter=sync_val;
+        fast_syncfilter=sync_val;
+        status = IR_STATE_ON;
+        break;
     case IR_STATE_ON:
-        // Switch ON IR LEDs
-        ir_flap_enable();
-        ir_sync_enable();
-        // Wait until LED is ON
-        __delay_cycles(4000);
-        // Get
+        // Shift values
+        for(i=0;i<VECTOR_LENGTH-1;i++)
+        {
+            flapval[i]=flapval[i+1];
+            syncval[i]=syncval[i+1];
+        }
+        // Get new values
         adc_meas_ir();
-        ir_flapval = flap_val;
-        ir_syncval = sync_val;
-        // Switch OFF IR LEDs
-        ir_flap_disable();
-        ir_sync_disable();
-        // Wait until LED is OFF
-        __delay_cycles(4000);
-        // Get floors
-        adc_meas_ir();
-        floor_flapval = flap_val;
-        floor_syncval = sync_val;
-        // Get difference
-        flapdif += ir_flapval - floor_flapval;
-        syncdif += ir_syncval - floor_syncval;
-        // Detect each sensor
-        /*if (fast_flapfilter > slow_flapfilter + reg_ir_threshold_flap) flap_detected= true;
+        flapval[VECTOR_LENGTH-1]=flap_val;
+        syncval[VECTOR_LENGTH-1]=sync_val;
+        // Do filter
+        slow_flapfilter = filter(slow_flapfilter, flap_val, 0.01);
+        fast_flapfilter = filter(fast_flapfilter, flap_val, 0.5);
+        slow_syncfilter = filter(slow_syncfilter, flap_val, 0.01);
+        fast_syncfilter = filter(fast_syncfilter, flap_val, 0.5);
+
+        // Update difs
+        flap_filter_dif = fast_flapfilter - slow_flapfilter;
+        if (flap_filter_dif<0) flap_filter_dif=-flap_filter_dif;
+        sync_filter_dif = fast_syncfilter - slow_syncfilter;
+        if (sync_filter_dif<0) sync_filter_dif=-sync_filter_dif;
+
+        if(flap_filter_dif>maxdif) maxdif=flap_filter_dif;
+
+        if(flap_filter_dif>reg_ir_threshold_flap) flap_detected=true;
+        if(sync_filter_dif>reg_ir_threshold_sync) flap_detected=true;
+
+        // Detect event
         if(flap_detected || sync_detected)
         {
             // Wait for dephased detection
             if(dephase_counter++>reg_dephase_time){
                 // Go to debounce when detected
                 status = IR_STATE_DEBOUNCE;
+
                 // Notify about end of detection
                 return true;
             }
-        }*/
-        ac_counter++;
-        if(ac_counter>=20)
-        {
-            ac_counter=0;
-            flapdif = 0;
-            syncdif=0;
         }
         break;
     case IR_STATE_DEBOUNCE:
@@ -133,3 +155,9 @@ bool ir_sense()
     return false;
 
 }
+
+float filter(float oldval, float newval, float speed)
+{
+    return (1-speed)*oldval + speed*newval;
+}
+

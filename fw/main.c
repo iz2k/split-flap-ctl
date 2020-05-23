@@ -18,7 +18,7 @@
 
 int main(void)
   {
-    uint8_t current_digit_code = 1;
+    uint8_t current_digit_code =250;
 
     setup_mcu();
     setup_systick();
@@ -38,6 +38,7 @@ int main(void)
     // Configure ADC for IR
     adc_config_ir();
 
+
     while(1)
     {
         if (fSystick>0)
@@ -52,7 +53,8 @@ int main(void)
                 // End of detection
                 if(ir_sense())
                 {
-                    //if (flap_detected) current_digit_code++;
+                    if (flap_detected)
+                        current_digit_code++;
                 }
             }else{
                 stepper_stop();

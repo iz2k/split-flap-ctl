@@ -54,12 +54,12 @@ _DECL uint8_t  reg_digit_code           _INIT(0);
 #ifdef VAR_DECLS
 #pragma PERSISTENT(reg_ir_threshold_flap)
 #endif
-_DECL uint16_t  reg_ir_threshold_flap   _INIT(5);
+_DECL uint16_t  reg_ir_threshold_flap   _INIT(10);
 
 #ifdef VAR_DECLS
 #pragma PERSISTENT(reg_ir_threshold_sync)
 #endif
-_DECL uint16_t  reg_ir_threshold_sync   _INIT(5);
+_DECL uint16_t  reg_ir_threshold_sync   _INIT(10);
 
 #ifdef VAR_DECLS
 #pragma PERSISTENT(reg_debounce_time)
