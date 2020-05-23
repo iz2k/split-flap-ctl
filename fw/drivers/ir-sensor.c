@@ -13,11 +13,11 @@
 
 ir_sensor_state status;
 uint16_t floor_flapval, floor_syncval;
-int32_t integral_flapval, integral_syncval;
+uint16_t ir_flapval, ir_syncval;
+int16_t flapdif, syncdif;
 uint8_t debounce_counter;
 uint8_t dephase_counter;
-uint8_t turn_on_counter;
-float slow_flapfilter, fast_flapfilter;
+uint8_t ac_counter;
 
 void setup_ir_sensor()
 {
@@ -49,16 +49,7 @@ void ir_sync_disable()
 
 void ir_start_sensing()
 {
-    ir_flap_enable();
-    ir_sync_enable();
-
-    status = IR_STATE_TURN_ON;
-    turn_on_counter=0;
-
-    // Reset integrals to 0
-    integral_flapval=0;
-    integral_syncval=0;
-    slow_flapfilter=0;
+    status = IR_STATE_ON;
 
     // Reset detection flags
     flap_detected=false;
@@ -67,12 +58,8 @@ void ir_start_sensing()
     // Reset counters
     dephase_counter=0;
     debounce_counter=0;
-}
 
-void ir_stop_sensing()
-{
-    ir_flap_disable();
-    ir_sync_disable();
+    ac_counter=0;
 }
 
 void ir_systick()
@@ -95,35 +82,30 @@ bool ir_sense()
         // Discard ADC data and switch IR sensor ON
         ir_start_sensing();
         break;
-    case IR_STATE_TURN_ON:
-        adc_meas_ir();
-        // Switch IR sensor ON
-        if(turn_on_counter++>5)
-        {
-            status = IR_STATE_CAL;
-        }
-        break;
-    case IR_STATE_CAL:
-        adc_meas_ir();
-        // Set ADC data as floor
-        floor_flapval=flap_val;
-        floor_syncval=sync_val;
-        slow_flapfilter=flap_val;
-        status = IR_STATE_ON;
-        break;
     case IR_STATE_ON:
+        // Switch ON IR LEDs
+        ir_flap_enable();
+        ir_sync_enable();
+        // Wait until LED is ON
+        __delay_cycles(4000);
+        // Get
         adc_meas_ir();
-        // Integrate
-        //integral_flapval += ((int16_t) flap_val - (int16_t) floor_flapval);
-        //integral_syncval += ((int16_t) sync_val - (int16_t) floor_syncval);
+        ir_flapval = flap_val;
+        ir_syncval = sync_val;
+        // Switch OFF IR LEDs
+        ir_flap_disable();
+        ir_sync_disable();
+        // Wait until LED is OFF
+        __delay_cycles(4000);
+        // Get floors
+        adc_meas_ir();
+        floor_flapval = flap_val;
+        floor_syncval = sync_val;
+        // Get difference
+        flapdif += ir_flapval - floor_flapval;
+        syncdif += ir_syncval - floor_syncval;
         // Detect each sensor
-        //if (integral_flapval > reg_ir_threshold_flap) flap_detected= true;
-        //if (integral_syncval > reg_ir_threshold_sync) sync_detected= true;
-        // Filter
-        slow_flapfilter = filter(slow_flapfilter, flap_val, 0.01);
-        fast_flapfilter = filter(fast_flapfilter, flap_val, 0.5);
-        // Detect each sensor
-        if (fast_flapfilter > slow_flapfilter + reg_ir_threshold_flap) flap_detected= true;
+        /*if (fast_flapfilter > slow_flapfilter + reg_ir_threshold_flap) flap_detected= true;
         if(flap_detected || sync_detected)
         {
             // Wait for dephased detection
@@ -133,6 +115,13 @@ bool ir_sense()
                 // Notify about end of detection
                 return true;
             }
+        }*/
+        ac_counter++;
+        if(ac_counter>=20)
+        {
+            ac_counter=0;
+            flapdif = 0;
+            syncdif=0;
         }
         break;
     case IR_STATE_DEBOUNCE:
@@ -143,22 +132,4 @@ bool ir_sense()
     // Detection in curse yet
     return false;
 
-}
-
-bool ir_sensor_ready()
-{
-    switch(status)
-    {
-    case IR_STATE_OFF:
-    case IR_STATE_CAL:
-        return false;
-    case IR_STATE_ON:
-    case IR_STATE_DEBOUNCE:
-        return true;
-    }
-}
-
-float filter(float oldval, float newval, float speed)
-{
-    return (1-speed)*oldval + speed*newval;
 }

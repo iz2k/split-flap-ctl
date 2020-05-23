@@ -17,8 +17,8 @@
 #include <global_variables.h>
 
 int main(void)
- {
-    uint8_t current_digit_code = 0;
+  {
+    uint8_t current_digit_code = 1;
 
     setup_mcu();
     setup_systick();
@@ -48,11 +48,11 @@ int main(void)
             ir_systick();
 
             if (current_digit_code != reg_digit_code){
-                if (ir_sensor_ready()) stepper_move();
+                stepper_move();
                 // End of detection
                 if(ir_sense())
                 {
-                    if (flap_detected) current_digit_code++;
+                    //if (flap_detected) current_digit_code++;
                 }
             }else{
                 stepper_stop();
