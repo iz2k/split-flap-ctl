@@ -49,6 +49,7 @@ _DECL bool sync_detected  _INIT(false);
 // SMBUS VOLATILE REGISTERS
 _DECL const uint16_t  reg_fw_version    _INIT(0x0106);
 _DECL uint8_t  reg_digit_code           _INIT(0);
+_DECL uint8_t  reg_current_digit        _INIT(0);
 
 // SMBUS NON-VOLATILE REGISTERS
 #ifdef VAR_DECLS
@@ -60,6 +61,11 @@ _DECL uint16_t  reg_ir_threshold_flap   _INIT(10);
 #pragma PERSISTENT(reg_ir_threshold_sync)
 #endif
 _DECL uint16_t  reg_ir_threshold_sync   _INIT(10);
+
+#ifdef VAR_DECLS
+#pragma PERSISTENT(reg_turnon_time)
+#endif
+_DECL uint16_t  reg_turnon_time       _INIT(100);
 
 #ifdef VAR_DECLS
 #pragma PERSISTENT(reg_debounce_time)

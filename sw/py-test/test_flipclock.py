@@ -8,6 +8,7 @@ def menu():
     print('1 - Read and report all registers')
     print('2 - Read specific register')
     print('3 - Write specific register')
+    print('4 - Cal current digit')
     print('q - Quit')
     print('----------------------------------------')
 
@@ -37,5 +38,9 @@ while run:
         if(reg.type is int):
             val = int(input('Set new value: '), 0)
         flipclock_smbus.write_register(reg, val)
+    if (option is '4'):
+        val = int(input('Calibrate current value: '), 0)
+        flipclock_smbus.write_register(flipclock_smbus.regs.SMB_CURRENT_DIGIT, val)
+        flipclock_smbus.write_register(flipclock_smbus.regs.SMB_DIGIT_CODE, val)
     if (option is 'q'):
         run=False

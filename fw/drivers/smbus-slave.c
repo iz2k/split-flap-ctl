@@ -110,10 +110,14 @@ uint8_t *get_reg_pointer(smbus_registers address)
         return (uint8_t*) &reg_ir_threshold_flap;
     case SMB_IR_THRESHOLD_SYNC:
         return (uint8_t*) &reg_ir_threshold_sync;
+    case SMB_TURNON_TIME:
+        return (uint8_t*) &reg_turnon_time;
     case SMB_DEBOUNCE_TIME:
         return (uint8_t*) &reg_debounce_time;
     case SMB_DEPHASE_TIME:
         return (uint8_t*) &reg_dephase_time;
+    case SMB_CURRENT_DIGIT:
+        return (uint8_t*) &reg_current_digit;
     default:
         return 0;
     }
@@ -126,10 +130,12 @@ uint8_t get_reg_len(smbus_registers address)
     case SMB_FW_VERSION:
     case SMB_IR_THRESHOLD_FLAP:
     case SMB_IR_THRESHOLD_SYNC:
+    case SMB_TURNON_TIME:
     case SMB_DEBOUNCE_TIME:
     case SMB_DEPHASE_TIME:
         return 2;
     case SMB_DIGIT_CODE:
+    case SMB_CURRENT_DIGIT:
         return 1;
     default:
         return 0;

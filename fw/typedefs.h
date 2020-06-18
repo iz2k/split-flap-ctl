@@ -28,8 +28,10 @@ typedef enum {
     SMB_DIGIT_CODE          = 2,
     SMB_IR_THRESHOLD_FLAP   = 3,
     SMB_IR_THRESHOLD_SYNC   = 4,
-    SMB_DEBOUNCE_TIME       = 5,
-    SMB_DEPHASE_TIME       = 6
+    SMB_TURNON_TIME         = 5,
+    SMB_DEBOUNCE_TIME       = 6,
+    SMB_DEPHASE_TIME        = 7,
+    SMB_CURRENT_DIGIT       = 8
 } smbus_registers;
 
 typedef enum{

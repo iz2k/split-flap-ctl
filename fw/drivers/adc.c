@@ -13,8 +13,10 @@
 void setup_adc()
 {
     // Configure ADC A1 pin
-    P1SEL0 |= BIT0 + BIT1 + BIT7;
-    P1SEL1 |= BIT0 + BIT1 + BIT7;
+    //P1SEL0 |= BIT0 + BIT1 + BIT7;
+    //P1SEL1 |= BIT0 + BIT1 + BIT7;
+    P1SEL0 |= BIT0 + BIT1;
+    P1SEL1 |= BIT0 + BIT1;
 }
 
 void adc_config_id()

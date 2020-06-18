@@ -17,9 +17,7 @@
 #include <global_variables.h>
 
 int main(void)
-  {
-    uint8_t current_digit_code =250;
-
+{
     setup_mcu();
     setup_systick();
     setup_stepper();
@@ -27,13 +25,18 @@ int main(void)
     setup_adc();
     setup_ir_sensor();
 
+    P1DIR |= BIT7;
+    P1OUT &= ~BIT7;
+
     unlock_GPIOs();
 
     __bis_SR_register(GIE);
 
     // Get ROLE with ADC
     adc_config_id();
-    init_smbus_slave(adc_get_role());
+    //init_smbus_slave(adc_get_role());
+    init_smbus_slave(ROLE_HOURS);
+
 
     // Configure ADC for IR
     adc_config_ir();
@@ -46,18 +49,22 @@ int main(void)
             // Deassert flag
             fSystick=0;
 
-            ir_systick();
-
-            if (current_digit_code != reg_digit_code){
-                stepper_move();
-                // End of detection
-                if(ir_sense())
+            if (reg_current_digit != reg_digit_code){
+                if(ir_is_on()==false)
                 {
-                    if (flap_detected)
-                        current_digit_code++;
+                    ir_power_on();
+                }else{
+                    stepper_move();
+                    // End of detection
+                    if(ir_sense())
+                    {
+                        //if (flap_detected)
+                            reg_current_digit++;
+                    }
                 }
             }else{
                 stepper_stop();
+                ir_power_off();
             }
         }
     }

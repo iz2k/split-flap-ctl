@@ -36,7 +36,9 @@ class msp430smbus:
         print('[CODE] ' + str(self.regs.SMB_DIGIT_CODE.content))
         print('[IR THRESHOLD FLAP] ' + str(self.regs.SMB_IR_THRESHOLD_FLAP.content))
         print('[IR THRESHOLD SYNC] ' + str(self.regs.SMB_IR_THRESHOLD_SYNC.content))
+        print('[TURNON TIME] ' + str(self.regs.SMB_TURNON_TIME.content))
         print('[DEBOUNCE TIME] ' + str(self.regs.SMB_DEBOUNCE_TIME.content))
         print('[DEPHASE TIME] ' + str(self.regs.SMB_DEPHASE_TIME.content))
+        print('[CURRENT DIGIT] ' + str(self.regs.SMB_CURRENT_DIGIT.content))
         print('----------------------------------------')
 

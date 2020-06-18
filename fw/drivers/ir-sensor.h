@@ -15,6 +15,13 @@ void ir_flap_enable();
 void ir_flap_disable();
 void ir_sync_enable();
 void ir_sync_disable();
+
+void ir_power_on();
+void ir_power_off();
+bool ir_is_on();
+
+
+
 bool ir_sense();
 void ir_systick();
 void ir_stop_sensing();
