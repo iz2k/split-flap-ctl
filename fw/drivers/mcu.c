@@ -47,7 +47,7 @@ void setup_systick()
 {
     // RTC count re-load compare value at 32.
     // 10/10000 * 1 = 1 msec.
-    RTCMOD = 1-1;
+    RTCMOD = 3-1;
                                             // Initialize RTC
     // Source = 32kHz VLOSC, divided by 16
     RTCCTL = RTCSS__VLOCLK | RTCSR | RTCPS__10 | RTCIE;
@@ -62,7 +62,7 @@ __interrupt void RTC_ISR(void)
     {
         case  RTCIV_NONE:   break;          // No interrupt
         case  RTCIV_RTCIF:                  // RTC Overflow
-            fSystick = 1;
+            fSystick++;
             break;
         default: break;
     }

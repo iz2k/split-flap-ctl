@@ -106,8 +106,18 @@ uint8_t *get_reg_pointer(smbus_registers address)
         return (uint8_t*) &reg_fw_version;
     case SMB_DIGIT_CODE:
         return (uint8_t*) &reg_digit_code;
-    case SMB_IR_THRESHOLD:
-        return (uint8_t*) &reg_ir_threshold;
+    case SMB_IR_THRESHOLD_FLAP:
+        return (uint8_t*) &reg_ir_threshold_flap;
+    case SMB_IR_THRESHOLD_SYNC:
+        return (uint8_t*) &reg_ir_threshold_sync;
+    case SMB_TURNON_TIME:
+        return (uint8_t*) &reg_turnon_time;
+    case SMB_DEBOUNCE_TIME:
+        return (uint8_t*) &reg_debounce_time;
+    case SMB_DEPHASE_TIME:
+        return (uint8_t*) &reg_dephase_time;
+    case SMB_CURRENT_DIGIT:
+        return (uint8_t*) &reg_current_digit;
     default:
         return 0;
     }
@@ -118,9 +128,14 @@ uint8_t get_reg_len(smbus_registers address)
     switch (address)
     {
     case SMB_FW_VERSION:
-    case SMB_IR_THRESHOLD:
+    case SMB_IR_THRESHOLD_FLAP:
+    case SMB_IR_THRESHOLD_SYNC:
+    case SMB_TURNON_TIME:
+    case SMB_DEBOUNCE_TIME:
+    case SMB_DEPHASE_TIME:
         return 2;
     case SMB_DIGIT_CODE:
+    case SMB_CURRENT_DIGIT:
         return 1;
     default:
         return 0;
@@ -159,12 +174,16 @@ void I2C_Slave_TransactionDone(uint8_t cmd)
 void CopyArray(uint8_t *source, uint8_t *dest, uint8_t count)
 {
     uint8_t copyIndex = 0;
+
+    // Program FRAM write enable
+    SYSCFG0 = FRWPPW;
     for (copyIndex = 0; copyIndex < count; copyIndex++)
     {
         dest[copyIndex] = source[copyIndex];
     }
+    // Program FRAM write protected (not writable)
+    SYSCFG0 = FRWPPW | PFWP;
 }
-
 
 //******************************************************************************
 // I2C Interrupt ***************************************************************
