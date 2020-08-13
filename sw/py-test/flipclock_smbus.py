@@ -40,5 +40,7 @@ class msp430smbus:
         print('[DEBOUNCE TIME] ' + str(self.regs.SMB_DEBOUNCE_TIME.content))
         print('[DEPHASE TIME] ' + str(self.regs.SMB_DEPHASE_TIME.content))
         print('[CURRENT DIGIT] ' + str(self.regs.SMB_CURRENT_DIGIT.content))
+        print('[CURRENT SYNC] ' + str(self.regs.SMB_CURRENT_SYNC.content))
+        print('[FIND SYNC] ' + str(self.regs.SMB_FIND_SYNC.content))
         print('----------------------------------------')
 

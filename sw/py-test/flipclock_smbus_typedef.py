@@ -22,6 +22,8 @@ class SMB_REGS(Enum):
     SMB_DEBOUNCE_TIME = 6, 2, int, 0
     SMB_DEPHASE_TIME = 7, 2, int, 0
     SMB_CURRENT_DIGIT = 8, 1, int, 0
+    SMB_CURRENT_SYNC = 9, 2, int, 0
+    SMB_FIND_SYNC = 10, 1, int, 0
 
 class SMB_OPS(Enum):
     SMB_OP_NONE = 0b00000000

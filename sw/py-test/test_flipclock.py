@@ -2,6 +2,7 @@
 import sys
 from flipclock_smbus_typedef import SMB_REGS
 from flipclock_smbus import msp430smbus
+import time
 
 def menu():
     print('----------------------------------------')
@@ -20,6 +21,7 @@ def select_register():
 # Create instance of msp432smbus
 flipclock_smbus=msp430smbus()
 
+i=0
 # Loop on menu
 run=True
 while run:
