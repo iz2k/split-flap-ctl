@@ -50,6 +50,7 @@ _DECL bool sync_detected  _INIT(false);
 _DECL const uint16_t  reg_fw_version    _INIT(0x0106);
 _DECL uint8_t  reg_digit_code           _INIT(0);
 _DECL uint8_t  reg_current_digit        _INIT(0);
+_DECL uint8_t  reg_find_sync            _INIT(0);
 
 // SMBUS NON-VOLATILE REGISTERS
 #ifdef VAR_DECLS

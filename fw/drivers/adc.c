@@ -51,7 +51,7 @@ uint16_t adc_meas_id()
     return ADCMEM0;
 }
 
-void adc_meas_ir(){
+void adc_meas_ir_n_hall(){
     // Wait if ADC core is active
     while(ADCCTL1 & ADCBUSY);
     // Sampling and conversion start
@@ -59,11 +59,11 @@ void adc_meas_ir(){
     // Wait until ADC measurement has been done
     while(!(ADCIFG & ADCIFG0));
     // Update ADC values
-    flap_val = ADCMEM0;
+    sync_val = ADCMEM0;
     // Wait until ADC measurement has been done
     while(!(ADCIFG & ADCIFG0));
     // Update ADC values
-    sync_val = ADCMEM0;
+    flap_val = ADCMEM0;
 }
 
 split_flap_role adc_get_role()

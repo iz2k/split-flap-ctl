@@ -9,6 +9,7 @@
 #include <constants.h>
 #include <drivers/mcu.h>
 #include <drivers/smbus-slave.h>
+#include <drivers/hall-sensor.h>
 #include <drivers/ir-sensor.h>
 #include <drivers/stepper.h>
 #include <drivers/adc.h>
@@ -25,9 +26,6 @@ int main(void)
     setup_adc();
     setup_ir_sensor();
 
-    P1DIR |= BIT7;
-    P1OUT &= ~BIT7;
-
     unlock_GPIOs();
 
     __bis_SR_register(GIE);
@@ -37,10 +35,11 @@ int main(void)
     //init_smbus_slave(adc_get_role());
     init_smbus_slave(ROLE_HOURS);
 
-
     // Configure ADC for IR
     adc_config_ir();
 
+    // Trigger a Sync as deivce just turned ON
+    reg_find_sync=1;
 
     while(1)
     {
@@ -49,6 +48,20 @@ int main(void)
             // Deassert flag
             fSystick=0;
 
+            if(reg_find_sync != 0)
+            {
+                adc_meas_ir_n_hall();
+                if(hall_sense())
+                {
+                    reg_find_sync=0;
+                    stepper_stop();
+                }else{
+                    stepper_move();
+                }
+            }else{
+                // Do normal function
+            }
+/*
             if (reg_current_digit != reg_digit_code){
                 if(ir_is_on()==false)
                 {
@@ -65,7 +78,7 @@ int main(void)
             }else{
                 stepper_stop();
                 ir_power_off();
-            }
+            }*/
         }
     }
 }

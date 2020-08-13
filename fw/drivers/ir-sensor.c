@@ -51,7 +51,6 @@ void ir_sync_disable()
 
 void ir_power_on()
 {
-    P1OUT |= BIT7;
     // Switch ON IR LEDs
     ir_flap_enable();
     turnon_counter++;
@@ -63,7 +62,6 @@ void ir_power_on()
 
         // Change status
         ir_status = IR_STATE_CAL;
-        P1OUT &= ~BIT7;
     }
 }
 
@@ -89,7 +87,7 @@ bool ir_sense()
     {
     case IR_STATE_CAL:
         // Get initial measurements for reference
-        adc_meas_ir();
+        adc_meas_ir_n_hall();
         slow_flapfilter=flap_val;
         fast_flapfilter=flap_val;
         slow_syncfilter=sync_val;
@@ -108,7 +106,7 @@ bool ir_sense()
         break;
     case IR_STATE_ON:
         // Get new values
-        adc_meas_ir();
+        adc_meas_ir_n_hall();
 
         // Do filter
         slow_flapfilter = filter(slow_flapfilter, flap_val, 0.01);

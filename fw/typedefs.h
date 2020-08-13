@@ -31,7 +31,9 @@ typedef enum {
     SMB_TURNON_TIME         = 5,
     SMB_DEBOUNCE_TIME       = 6,
     SMB_DEPHASE_TIME        = 7,
-    SMB_CURRENT_DIGIT       = 8
+    SMB_CURRENT_DIGIT       = 8,
+    SMB_CURRENT_SYNC        = 9,
+    SMB_FIND_SYNC           = 10
 } smbus_registers;
 
 typedef enum{

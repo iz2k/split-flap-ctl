@@ -118,6 +118,10 @@ uint8_t *get_reg_pointer(smbus_registers address)
         return (uint8_t*) &reg_dephase_time;
     case SMB_CURRENT_DIGIT:
         return (uint8_t*) &reg_current_digit;
+    case SMB_CURRENT_SYNC:
+        return (uint8_t*) &sync_val;
+    case SMB_FIND_SYNC:
+        return (uint8_t*) &reg_find_sync;
     default:
         return 0;
     }
@@ -133,9 +137,11 @@ uint8_t get_reg_len(smbus_registers address)
     case SMB_TURNON_TIME:
     case SMB_DEBOUNCE_TIME:
     case SMB_DEPHASE_TIME:
+    case SMB_CURRENT_SYNC:
         return 2;
     case SMB_DIGIT_CODE:
     case SMB_CURRENT_DIGIT:
+    case SMB_FIND_SYNC:
         return 1;
     default:
         return 0;
