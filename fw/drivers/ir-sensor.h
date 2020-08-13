@@ -19,6 +19,7 @@ void ir_sync_disable();
 void ir_power_on();
 void ir_power_off();
 bool ir_is_on();
+bool ir_is_debounce();
 
 
 

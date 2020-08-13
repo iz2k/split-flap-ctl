@@ -16,24 +16,21 @@ typedef enum {
 
 typedef enum {
     IR_STATE_OFF        = 0,
-    IR_STATE_TURN_ON    = 1,
-    IR_STATE_CAL        = 2,
-    IR_STATE_ON         = 3,
-    IR_STATE_DEBOUNCE   = 4
+    IR_STATE_ON         = 1,
+    IR_STATE_DEBOUNCE   = 2
 } ir_sensor_state;
 
 typedef enum {
     SMB_NONE                = 0,
     SMB_FW_VERSION          = 1,
-    SMB_DIGIT_CODE          = 2,
-    SMB_IR_THRESHOLD_FLAP   = 3,
-    SMB_IR_THRESHOLD_SYNC   = 4,
-    SMB_TURNON_TIME         = 5,
-    SMB_DEBOUNCE_TIME       = 6,
-    SMB_DEPHASE_TIME        = 7,
-    SMB_CURRENT_DIGIT       = 8,
-    SMB_CURRENT_SYNC        = 9,
-    SMB_FIND_SYNC           = 10
+    SMB_DESIRED_DIGIT       = 2,
+    SMB_CURRENT_DIGIT       = 3,
+    SMB_HALL_FIND           = 4,
+    SMB_HALL_THRESHOLD      = 5,
+    SMB_HALL_DIGIT          = 6,
+    SMB_IR_THRESHOLD        = 7,
+    SMB_IR_TURNON_TIME      = 8,
+    SMB_IR_DEBOUNCE_TIME    = 9
 } smbus_registers;
 
 typedef enum{

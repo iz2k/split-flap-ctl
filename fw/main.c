@@ -38,8 +38,8 @@ int main(void)
     // Configure ADC for IR
     adc_config_ir();
 
-    // Trigger a Sync as deivce just turned ON
-    reg_find_sync=1;
+    // Trigger a Sync as device just turned ON
+    reg_hall_find=1;
 
     while(1)
     {
@@ -48,37 +48,54 @@ int main(void)
             // Deassert flag
             fSystick=0;
 
-            if(reg_find_sync != 0)
+            if(reg_hall_find != 0)
             {
                 adc_meas_ir_n_hall();
                 if(hall_sense())
                 {
-                    reg_find_sync=0;
-                    stepper_stop();
+                    reg_hall_find=0;
+                    reg_current_digit = reg_hall_digit;
                 }else{
                     stepper_move();
                 }
             }else{
                 // Do normal function
-            }
-/*
-            if (reg_current_digit != reg_digit_code){
-                if(ir_is_on()==false)
+                if(reg_current_digit != reg_desired_digit)
                 {
-                    ir_power_on();
-                }else{
-                    stepper_move();
-                    // End of detection
-                    if(ir_sense())
+                    // Check if IR is ON
+                    if(!ir_is_on())
                     {
-                        //if (flap_detected)
+                        ir_power_on();
+                    }else{
+                        adc_meas_ir_n_hall();
+
+                        // Check if IR detected
+                        if(ir_sense())
+                        {
                             reg_current_digit++;
+                            if(reg_current_digit >= reg_max_digit)
+                            {
+                                reg_current_digit = 0;
+                            }
+                        }else{
+                            if(!ir_is_debounce())
+                            {
+                                stepper_move();
+                            }
+                        }
+
+                        // Check if HALL detected
+                        if(hall_sense())
+                        {
+                            reg_current_digit = reg_hall_digit;
+                        }
+
                     }
+                }else{
+                    ir_power_off();
+                    stepper_stop();
                 }
-            }else{
-                stepper_stop();
-                ir_power_off();
-            }*/
+            }
         }
     }
 }

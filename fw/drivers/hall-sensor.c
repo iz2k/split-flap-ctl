@@ -9,7 +9,7 @@
 #include <constants.h>
 #include <global_variables.h>
 #include <drivers/hall-sensor.h>
-#include <drivers/ir-sensor.h>
+#include <drivers/filter.h>
 
 float hall_filter=0;
 float max_val=0;
@@ -19,7 +19,7 @@ bool detection_done = true;
 bool hall_sense()
 {
     // Add new value to filter
-    hall_filter = filter(hall_filter, sync_val, 0.1);
+    hall_filter = filter(hall_filter, hall_val, 0.1);
 
     // Reset detection when far from magnet
     if(hall_filter==0)
@@ -38,7 +38,7 @@ bool hall_sense()
     if(detection_done == false)
     {
         // Check value falling below max
-        if (hall_filter < max_val - 10)
+        if (hall_filter < max_val - reg_hall_threshold)
         {
             // Current detection ends
             detection_done=true;

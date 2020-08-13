@@ -15,15 +15,14 @@ class SMB_REGS(Enum):
         self.content: int = d
 
     SMB_FW_VERSION = 1, 2, int, 0
-    SMB_DIGIT_CODE = 2, 1, int, 0
-    SMB_IR_THRESHOLD_FLAP = 3, 2, int, 0
-    SMB_IR_THRESHOLD_SYNC = 4, 2, int, 0
-    SMB_TURNON_TIME = 5, 2, int, 0
-    SMB_DEBOUNCE_TIME = 6, 2, int, 0
-    SMB_DEPHASE_TIME = 7, 2, int, 0
-    SMB_CURRENT_DIGIT = 8, 1, int, 0
-    SMB_CURRENT_SYNC = 9, 2, int, 0
-    SMB_FIND_SYNC = 10, 1, int, 0
+    SMB_DESIRED_DIGIT = 2, 1, int, 0
+    SMB_CURRENT_DIGIT = 3, 1, int, 0
+    SMB_HALL_FIND = 4, 1, int, 0
+    SMB_HALL_THRESHOLD = 5, 2, int, 0
+    SMB_HALL_DIGIT = 6, 1, int, 0
+    SMB_IR_THRESHOLD = 7, 2, int, 0
+    SMB_IR_TURNON_TIME = 8, 2, int, 0
+    SMB_IR_DEBOUNCE_TIME = 9, 2, int, 0
 
 class SMB_OPS(Enum):
     SMB_OP_NONE = 0b00000000

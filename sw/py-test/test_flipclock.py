@@ -9,7 +9,8 @@ def menu():
     print('1 - Read and report all registers')
     print('2 - Read specific register')
     print('3 - Write specific register')
-    print('4 - Cal current digit')
+    print('4 - Do Sync')
+    print('5 - Increment digit')
     print('q - Quit')
     print('----------------------------------------')
 
@@ -41,8 +42,13 @@ while run:
             val = int(input('Set new value: '), 0)
         flipclock_smbus.write_register(reg, val)
     if (option is '4'):
-        val = int(input('Calibrate current value: '), 0)
-        flipclock_smbus.write_register(flipclock_smbus.regs.SMB_CURRENT_DIGIT, val)
-        flipclock_smbus.write_register(flipclock_smbus.regs.SMB_DIGIT_CODE, val)
+        flipclock_smbus.write_register(flipclock_smbus.regs.SMB_HALL_FIND, 1)
+    if (option is '5'):
+        flipclock_smbus.read_register(flipclock_smbus.regs.SMB_DESIRED_DIGIT)
+        newval = flipclock_smbus.regs.SMB_DESIRED_DIGIT.content + 1
+        if (newval > 23):
+            newval = 0
+        flipclock_smbus.write_register(flipclock_smbus.regs.SMB_DESIRED_DIGIT, newval)
+        print('New digit request: ' + str(newval))
     if (option is 'q'):
         run=False
