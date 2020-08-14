@@ -45,15 +45,12 @@ void init_smbus_slave(split_flap_role role)
     {
     case ROLE_HOURS:
         UCB0I2COA0 = I2C_SLAVE_ADDR_H | UCOAEN;         // Own Address and enable
-        reg_max_digit = 24;
         break;
     case ROLE_MINUTES:
         UCB0I2COA0 = I2C_SLAVE_ADDR_M | UCOAEN;         // Own Address and enable
-        reg_max_digit = 60;
         break;
     case ROLE_WEATHER:
         UCB0I2COA0 = I2C_SLAVE_ADDR_W | UCOAEN;         // Own Address and enable
-        reg_max_digit = 24;
         break;
     }
     UCB0CTLW0 &= ~UCSWRST;                    // clear reset register

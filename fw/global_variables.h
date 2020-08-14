@@ -51,18 +51,20 @@ _DECL const uint16_t  reg_fw_version    _INIT(0x0107);
 _DECL uint8_t  reg_desired_digit        _INIT(0);
 _DECL uint8_t  reg_current_digit        _INIT(0);
 _DECL uint8_t  reg_max_digit            _INIT(0);
+_DECL uint8_t  reg_stepper_direction    _INIT(0);
 _DECL uint8_t  reg_hall_find            _INIT(0);
+_DECL uint8_t  reg_systick_period       _INIT(1);
 
 // SMBUS NON-VOLATILE REGISTERS
 #ifdef VAR_DECLS
 #pragma PERSISTENT(reg_hall_threshold)
 #endif
-_DECL uint16_t  reg_hall_threshold   _INIT(10);
+_DECL uint16_t  reg_hall_threshold   _INIT(20);
 
 #ifdef VAR_DECLS
 #pragma PERSISTENT(reg_hall_digit)
 #endif
-_DECL uint8_t  reg_hall_digit       _INIT(9);
+_DECL uint8_t  reg_hall_digit       _INIT(0);
 
 #ifdef VAR_DECLS
 #pragma PERSISTENT(reg_ir_threshold)

@@ -27,7 +27,7 @@ void setup_ir_sensor()
 
 void ir_power_on()
 {
-    if(turnon_counter++ >= reg_ir_turnon_time)
+    if(turnon_counter++ >= reg_ir_turnon_time/reg_systick_period)
     {
         ir_status = IR_STATE_ON;
         ir_filter = 0;
@@ -81,7 +81,7 @@ bool ir_sense()
         }
         break;
     case IR_STATE_DEBOUNCE:
-        if(debounce_counter++ >= reg_ir_debounce_time)
+        if(debounce_counter++ >= reg_ir_debounce_time/reg_systick_period)
         {
             ir_status = IR_STATE_ON;
             debounce_counter=0;

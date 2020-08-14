@@ -20,7 +20,6 @@
 int main(void)
 {
     setup_mcu();
-    setup_systick();
     setup_stepper();
     setup_smbus_slave();
     setup_adc();
@@ -32,14 +31,16 @@ int main(void)
 
     // Get ROLE with ADC
     adc_config_id();
-    //init_smbus_slave(adc_get_role());
-    init_smbus_slave(ROLE_HOURS);
+    init_smbus_slave(adc_get_role());
 
     // Configure ADC for IR
     adc_config_ir();
 
     // Trigger a Sync as device just turned ON
     reg_hall_find=1;
+
+    // Create systick
+    setup_systick();
 
     while(1)
     {

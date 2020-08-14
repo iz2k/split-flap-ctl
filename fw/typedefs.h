@@ -15,6 +15,11 @@ typedef enum {
 } split_flap_role;
 
 typedef enum {
+    CLOCKWISE      = 0,
+    ANTICLOCKWISE    = 1
+} stepper_direction;
+
+typedef enum {
     IR_STATE_OFF        = 0,
     IR_STATE_ON         = 1,
     IR_STATE_DEBOUNCE   = 2

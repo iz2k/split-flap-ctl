@@ -70,10 +70,25 @@ split_flap_role adc_get_role()
 {
     uint16_t id_val = adc_meas_id();
     if(id_val > 900)
+    {
+        reg_max_digit = 24;
+        reg_systick_period = 1;
+        reg_stepper_direction = CLOCKWISE;
         return ROLE_HOURS;
+    }
     if(id_val <= 900 && id_val > 100)
-        return ROLE_MINUTES;
-    if(id_val <= 100)
+    {
+        reg_max_digit = 24;
+        reg_systick_period = 1;
+        reg_stepper_direction = CLOCKWISE;
         return ROLE_WEATHER;
+    }
+    if(id_val <= 100)
+    {
+        reg_max_digit = 60;
+        reg_systick_period = 3;
+        reg_stepper_direction = ANTICLOCKWISE;
+        return ROLE_MINUTES;
+    }
     return ROLE_ERROR;
 }

@@ -7,6 +7,7 @@
 #include <drivers/stepper.h>
 #include <msp430.h>
 #include <stdint.h>
+#include <global_variables.h>
 
 const uint8_t stepmtx [8][4] =
 {
@@ -43,7 +44,12 @@ void stepper_move()
     stepmtx[iStp][1] ? (STP_2_POUT |= STP_2_BIT) : (STP_2_POUT &= ~ STP_2_BIT);
     stepmtx[iStp][2] ? (STP_3_POUT |= STP_3_BIT) : (STP_3_POUT &= ~ STP_3_BIT);
     stepmtx[iStp][3] ? (STP_4_POUT |= STP_4_BIT) : (STP_4_POUT &= ~ STP_4_BIT);
-    if(--iStp>7)iStp=7;
+    if(reg_stepper_direction == CLOCKWISE)
+    {
+        if(--iStp>7)iStp=7;
+    }else{
+        if(++iStp>7)iStp=0;
+    }
 }
 
 void stepper_stop()
