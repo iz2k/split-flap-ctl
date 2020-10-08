@@ -19,30 +19,31 @@ bool detection_done = true;
 bool hall_sense()
 {
     // Add new value to filter
-    hall_filter = filter(hall_filter, hall_val, 0.1);
+    hall_filter = filter(hall_filter, hall_val, 0.2);
+    //hall_filter=hall_val;
 
     // Reset detection when far from magnet
-    if(hall_filter==0)
+    if(hall_filter<100)
     {
         max_val = 0;
         detection_done=false;
-    }
-
-    // Find max value
-    if (hall_filter > max_val)
-    {
-        max_val = hall_filter;
-    }
-
-    // Check if detection is not done
-    if(detection_done == false)
-    {
-        // Check value falling below max
-        if (hall_filter < max_val - reg_hall_threshold)
+    }else{
+        // Find max value
+        if (hall_filter > max_val)
         {
-            // Current detection ends
-            detection_done=true;
-            return true;
+            max_val = hall_filter;
+        }
+
+        // Check if detection is not done
+        if(detection_done == false)
+        {
+            // Check value falling below max
+            if (hall_filter < max_val - reg_hall_threshold)
+            {
+                // Current detection ends
+                detection_done=true;
+                return true;
+            }
         }
     }
 
