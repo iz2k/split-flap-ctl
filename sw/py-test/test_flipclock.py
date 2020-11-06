@@ -39,8 +39,8 @@ while run:
         hh_smbus.read_all()
         hh_smbus.print_report()
         print('******* MM **********')
-        #mm_smbus.read_all()
-        #mm_smbus.print_report()
+        mm_smbus.read_all()
+        mm_smbus.print_report()
     if (option is '2'):
         reg = hh_smbus.regs(select_register())
         if(reg.type is int):
