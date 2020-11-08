@@ -76,3 +76,7 @@ try:
   shutil.rmtree(Path('build'))
 except:
   pass
+try:
+  shutil.rmtree(Path('temp'))
+except:
+  pass
