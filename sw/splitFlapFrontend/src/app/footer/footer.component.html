@@ -1,10 +1,10 @@
-<div class="footer bg-light text-dark">
+<div *ngIf="osInfo != undefined" class="footer bg-light text-dark">
   <div class="column w40 text-left pl-1 pt-1" >
     <div>
-      Hostname:
+      Hostname: {{osInfo['hostname']}}
     </div>
     <div>
-      IP:
+      IP: {{osInfo['ip']}}
     </div>
   </div>
   <div class="column w20 text-center pt-2">
@@ -14,10 +14,13 @@
   </div>
   <div class="column w40 text-right pr-1 pt-1">
     <div>
-      Free space:
+      Free space: {{osInfo['fs_free_GB']}}GB/{{osInfo['fs_total_GB']}}GB
     </div>
-    <div>
+    <div *ngIf="osInfo['internet']">
       Connected to internet
+    </div>
+    <div *ngIf="!osInfo['internet']">
+      No internet connection
     </div>
   </div>
 </div>

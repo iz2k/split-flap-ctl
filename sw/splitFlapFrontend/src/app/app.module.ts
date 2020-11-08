@@ -10,6 +10,8 @@ import { FooterComponent } from './footer/footer.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { WeatherComponent } from './weather/weather.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import {SocketIoModule} from 'ngx-socket-io';
+import {SocketBackendService} from "./socket-backend.service";
 
 @NgModule({
   declarations: [
@@ -24,9 +26,10 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
-    NgbModule
+    NgbModule,
+    SocketIoModule
   ],
-  providers: [],
+  providers: [SocketBackendService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

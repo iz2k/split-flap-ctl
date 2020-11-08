@@ -58,4 +58,4 @@ class osInfoThread(Thread):
 
     def emit(self):
         print('osInfo: ' + str(self.report))
-        self.sio.emit('networking', prettyJson(self.report))
+        self.sio.emit('osInfo', prettyJson(self.report))
