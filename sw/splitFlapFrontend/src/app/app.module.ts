@@ -11,7 +11,10 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { WeatherComponent } from './weather/weather.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import {SocketIoModule} from 'ngx-socket-io';
-import {SocketBackendService} from "./socket-backend.service";
+import {BackendService} from './backend.service';
+import {HttpClientModule} from '@angular/common/http';
+import {JSBAngularFlipClockModule} from 'jsb-angular-flip-clock';
+
 
 @NgModule({
   declarations: [
@@ -26,10 +29,12 @@ import {SocketBackendService} from "./socket-backend.service";
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
+    JSBAngularFlipClockModule,
     NgbModule,
-    SocketIoModule
+    SocketIoModule,
+    HttpClientModule
   ],
-  providers: [SocketBackendService],
+  providers: [BackendService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

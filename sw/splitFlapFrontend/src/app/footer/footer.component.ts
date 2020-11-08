@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {SocketBackendService} from '../socket-backend.service';
+import {BackendService} from '../backend.service';
 
 @Component({
   selector: 'app-footer',
@@ -8,7 +8,7 @@ import {SocketBackendService} from '../socket-backend.service';
 })
 export class FooterComponent implements OnInit {
 
-  constructor(private backend: SocketBackendService) { }
+  constructor(private backend: BackendService) { }
 
   osInfo;
 
