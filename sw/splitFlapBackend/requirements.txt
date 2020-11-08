@@ -1,0 +1,8 @@
+flask
+flask_socketio
+flask_cors
+eventlet
+sqlalchemy
+sqlalchemy_utils
+pymysql
+mysqlclient
