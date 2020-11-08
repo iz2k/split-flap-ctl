@@ -2,6 +2,7 @@
 import argparse
 
 from splitFlapBackend.osInfo.osInfoThread import osInfoThread
+from splitFlapBackend.tools.jsontools import prettyJson
 from splitFlapBackend.webServer.webServer import define_webserver
 
 

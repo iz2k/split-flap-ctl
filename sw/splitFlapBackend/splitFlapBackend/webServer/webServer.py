@@ -1,6 +1,6 @@
 from splitFlapBackend.osInfo import osInfoThread
-from splitFlapBackend.webServer.routes.tagTester import defineTagTesterRoutes
-from splitFlapBackend.webServer.routes.websocket import defineWebsocketEvents
+from splitFlapBackend.webServer.routes.clock import defineClockRoutes
+from splitFlapBackend.webServer.routes.osInfo import defineOsInfoRoutes
 
 
 def define_webserver(osinfo : osInfoThread, debug):
@@ -26,10 +26,8 @@ def define_webserver(osinfo : osInfoThread, debug):
     # Enable CORS to SocketIO
     sio.init_app(app, cors_allowed_origins="*")
 
-    # Define REST routes
-    defineTagTesterRoutes(app, sio)
+    defineClockRoutes(app, sio)
 
-    # Define SocketIO events
-    defineWebsocketEvents(sio , osinfo)
+    defineOsInfoRoutes(sio , osinfo)
 
     return [app, sio]

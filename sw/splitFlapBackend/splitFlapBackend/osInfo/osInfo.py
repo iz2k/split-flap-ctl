@@ -2,6 +2,9 @@ import os
 import shutil
 import socket
 import urllib
+from time import strftime, gmtime
+
+from babel.localtime import get_localzone
 
 
 class osInfo:
@@ -19,12 +22,16 @@ class osInfo:
         fs_total_GB = "%.2f" % (stat.total/1024/1024/1024)
         fs_free_GB = "%.2f" % (stat.free/1024/1024/1024)
 
+        # Get TimeZone
+        timezone = self.getTimeZone()
+
         hostinfo =  {
             'hostname' : hostname,
             'ip' : ip,
             'internet' : internet,
             'fs_total_GB' : fs_total_GB,
-            'fs_free_GB' : fs_free_GB
+            'fs_free_GB' : fs_free_GB,
+            'timezone' : timezone
         }
         return hostinfo
 
@@ -50,3 +57,7 @@ class osInfo:
         except Exception as e:
             print(e)
             return False
+
+    def getTimeZone(self):
+        tdiff = strftime("%z", gmtime())
+        return str(get_localzone()) + ' (' + tdiff[:3] + ':' + tdiff[3:] + ')'
