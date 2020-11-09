@@ -12,7 +12,7 @@ export class BackendService extends Socket {
   private urlEndPoint = 'http://' + backendHost + ':' + backendPort;
 
   constructor(private http: HttpClient){
-        super({ url: 'http://localhost:8081', options: {} });
+        super({ url: 'http://' + backendHost + ':' + backendPort, options: {} });
         console.log('Creating Backend Service');
         this.ioSocket.on('connect', () => console.log('Backend WebSocket Connected'));
   }
