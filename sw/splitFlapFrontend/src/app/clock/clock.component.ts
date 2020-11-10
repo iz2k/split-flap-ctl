@@ -1,5 +1,6 @@
 import {BackendService} from '../backend.service';
 import {Component, OnInit} from '@angular/core';
+import {FormControl} from "@angular/forms";
 
 @Component({
   selector: 'app-clock',
@@ -10,6 +11,7 @@ import {Component, OnInit} from '@angular/core';
 export class ClockComponent implements OnInit {
 
   clockTime: any;
+  date = new FormControl(new Date());
   HoursTensPlace = 0;
   HoursOnesPlace = 0;
   MinutesTensPlace = 0;

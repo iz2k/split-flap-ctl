@@ -13,7 +13,12 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import {SocketIoModule} from 'ngx-socket-io';
 import {BackendService} from './backend.service';
 import {HttpClientModule} from '@angular/common/http';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {ReactiveFormsModule} from '@angular/forms';
+import {MatInputModule } from '@angular/material/input';
 import {JSBAngularFlipClockModule} from 'jsb-angular-flip-clock';
+import {MatNativeDateModule} from "@angular/material/core";
 
 
 @NgModule({
@@ -32,7 +37,12 @@ import {JSBAngularFlipClockModule} from 'jsb-angular-flip-clock';
     JSBAngularFlipClockModule,
     NgbModule,
     SocketIoModule,
-    HttpClientModule
+    HttpClientModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    ReactiveFormsModule
   ],
   providers: [BackendService],
   bootstrap: [AppComponent]

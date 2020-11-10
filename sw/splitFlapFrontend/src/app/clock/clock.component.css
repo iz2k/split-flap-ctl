@@ -1,0 +1,8 @@
+.test{
+  border-width: 1px;
+  border-color: black;
+  border-style: solid;
+}
+.clockContainer {
+  min-width: 600px;
+}
