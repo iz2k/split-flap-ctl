@@ -15,10 +15,11 @@ import {BackendService} from './backend.service';
 import {HttpClientModule} from '@angular/common/http';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatDatepickerModule} from '@angular/material/datepicker';
-import {ReactiveFormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatInputModule } from '@angular/material/input';
 import {JSBAngularFlipClockModule} from 'jsb-angular-flip-clock';
-import {MatNativeDateModule} from "@angular/material/core";
+import {MatNativeDateModule} from '@angular/material/core';
+import {MomentTimezonePickerModule} from 'moment-timezone-picker';
 
 
 @NgModule({
@@ -42,7 +43,9 @@ import {MatNativeDateModule} from "@angular/material/core";
     MatInputModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MomentTimezonePickerModule,
+    FormsModule
   ],
   providers: [BackendService],
   bootstrap: [AppComponent]

@@ -1,6 +1,6 @@
 import {BackendService} from '../backend.service';
 import {Component, OnInit} from '@angular/core';
-import {FormControl} from "@angular/forms";
+import {FormControl, FormGroup} from "@angular/forms";
 
 @Component({
   selector: 'app-clock',
@@ -11,21 +11,29 @@ import {FormControl} from "@angular/forms";
 export class ClockComponent implements OnInit {
 
   clockTime: any;
-  date = new FormControl(new Date());
   HoursTensPlace = 0;
   HoursOnesPlace = 0;
   MinutesTensPlace = 0;
   MinutesOnesPlace = 0;
   SecondsTensPlace = 0;
   SecondsOnesPlace = 0;
+  date: FormControl;
+  tzFormGroup: FormGroup;
+  timezone = new FormControl('');
+
   constructor(private backend: BackendService) { }
+
 
   ngOnInit(): void {
     this.backend.getTime().subscribe(json => this.updateClockTime(json));
+    this.tzFormGroup = new FormGroup({
+    timezone: this.timezone
+  });
   }
 
   updateClockTime(json): void {
     this.clockTime = json;
+    this.timezone.setValue(this.clockTime.timezone);
     this.updateFlipClockWidget();
     setInterval
       (_ => {
@@ -35,12 +43,14 @@ export class ClockComponent implements OnInit {
   }
 
   updateFlipClockWidget(): void {
-        this.HoursTensPlace = Math.floor(this.clockTime.hour / 10);
-        this.HoursOnesPlace = Math.floor(this.clockTime.hour % 10);
-        this.MinutesTensPlace = Math.floor(this.clockTime.minute / 10);
-        this.MinutesOnesPlace = Math.floor(this.clockTime.minute % 10);
-        this.SecondsTensPlace = Math.floor(this.clockTime.second / 10);
-        this.SecondsOnesPlace = Math.floor(this.clockTime.second % 10);
+      this.date = new FormControl(new Date(this.clockTime.year, this.clockTime.month - 1, this.clockTime.day,
+                                          this.clockTime.hour, this.clockTime.minute, this.clockTime.second));
+      this.HoursTensPlace = Math.floor(this.clockTime.hour / 10);
+      this.HoursOnesPlace = Math.floor(this.clockTime.hour % 10);
+      this.MinutesTensPlace = Math.floor(this.clockTime.minute / 10);
+      this.MinutesOnesPlace = Math.floor(this.clockTime.minute % 10);
+      this.SecondsTensPlace = Math.floor(this.clockTime.second / 10);
+      this.SecondsOnesPlace = Math.floor(this.clockTime.second % 10);
   }
 
   incrementClockTime(): void {

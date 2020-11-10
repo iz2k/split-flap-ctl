@@ -1,37 +1,37 @@
-<div id="div" class="container py-2 clockContainer" >
-  <div class="card border-dark">
+<div class="container py-2 w100 clockContainer" >
+  <div class="card border-dark w100">
     <div class="text-center bg-cardtitle pt-2">
-    <h4>Clock configuration</h4>
-  </div>
-  <div class="row card-body">
-    <table class="w100">
-      <tr>
-        <td width="*"></td>
-        <td class="text-center" width="550px">
-          <mat-form-field>
-            <input matInput [matDatepicker]="picker" placeholder="Date" [value]="date.value">
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-          </mat-form-field>
-        </td>
-        <td width="*"></td>
-      </tr>
-      <tr>
-        <td width="*"></td>
-        <td width="550px">
-          <JSB-flipclock *ngIf="clockTime != undefined"
-          [HoursTensPlace]=HoursTensPlace
-          [HoursOnesPlace]=HoursOnesPlace
-          [MinutesTensPlace]=MinutesTensPlace
-          [MinutesOnesPlace]=MinutesOnesPlace
-          [SecondsTensPlace]=SecondsTensPlace
-          [SecondsOnesPlace]=SecondsOnesPlace
-          ></JSB-flipclock>
-        </td>
-        <td width="*"></td>
-      </tr>
-    </table>
-  </div>
-  </div>
+      <h4>Clock configuration</h4>
+    </div>
 
+    <div class="card-body w100" style="height: 70px" *ngIf="clockTime != undefined"  [formGroup]="tzFormGroup">
+            <mat-form-field class="datepicker">
+              <input matInput [matDatepicker]="picker" placeholder="Date" [value]="date.value">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+            <ng-moment-timezone-picker class="tzonepicker"
+              [formControlName]="'timezone'"
+              [customPlaceholderText]="'Timezone'">
+            </ng-moment-timezone-picker>
+    </div>
+    <div class="card-body w100  align-content-center" *ngIf="clockTime != undefined">
+      <table class="w100">
+          <td width="*" class="align-content-center"></td>
+          <td width="550px" class="align-content-center">
+            <JSB-flipclock
+              [HoursTensPlace]=HoursTensPlace
+              [HoursOnesPlace]=HoursOnesPlace
+              [MinutesTensPlace]=MinutesTensPlace
+              [MinutesOnesPlace]=MinutesOnesPlace
+              [SecondsTensPlace]=SecondsTensPlace
+              [SecondsOnesPlace]=SecondsOnesPlace
+              >
+            </JSB-flipclock>
+          </td>
+          <td  width="*" class="align-content-center"></td>
+
+      </table>
+    </div>
+  </div>
 </div>

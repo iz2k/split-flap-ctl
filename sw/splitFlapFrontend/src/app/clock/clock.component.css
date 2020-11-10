@@ -4,5 +4,17 @@
   border-style: solid;
 }
 .clockContainer {
-  min-width: 600px;
+  min-width: 800px;
+}
+.tzonepicker{
+  height: 100px;
+  position: absolute;
+  top: 50px;
+  right: 10px;
+}
+.datepicker{
+  height: 100px;
+  position: absolute;
+  top: 55px;
+  left: 10px;
 }
