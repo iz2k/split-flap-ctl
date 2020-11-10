@@ -54,7 +54,8 @@ class osInfo:
 
     def getTimeZone(self):
         tdiff = strftime("%z", gmtime())
-        return str(get_localzone()) + ' (' + tdiff[:3] + ':' + tdiff[3:] + ')'
+        #return str(get_localzone()) + ' (' + tdiff[:3] + ':' + tdiff[3:] + ')'
+        return str(get_localzone())
 
     def getInternetUrllib(self, url='http://google.com', timeout=3):
         try:

@@ -18,33 +18,33 @@ def main():
     args = parser.parse_args()
 
     # Define threads
-    osinfo = osInfoThread()
+    osinfoTh = osInfoThread()
 
     # Define WebServer
-    [app, sio] = define_webserver(osinfo, debug=debug)
+    [app, sio] = define_webserver(osinfoTh.osInfoCtl, debug=debug)
 
     # Pass SIO to threads
-    osinfo.set_sio(sio)
+    osinfoTh.set_sio(sio)
 
     try:
         # Start threads
-        osinfo.start()
+        osinfoTh.start()
 
         # Start Webserver (blocks this thread until server quits)
         print('Starting Web Server:')
-        print('\t\thttp://' + str(osinfo.report['hostname']) + ':' + str(args.port))
-        print('\t\thttp://' + str(osinfo.report['ip']) + ':' + str(args.port))
+        print('\t\thttp://' + str(osinfoTh.report['hostname']) + ':' + str(args.port))
+        print('\t\thttp://' + str(osinfoTh.report['ip']) + ':' + str(args.port))
         sio.run(app, port=args.port, host='0.0.0.0', debug=debug)
 
         # When server ends, stop threads
-        osinfo.stop()
+        osinfoTh.stop()
 
         # Print Goodby msg
         print('Exiting R102-DB-CTL...')
 
     except KeyboardInterrupt:
         # Stop threads
-        osinfo.stop()
+        osinfoTh.stop()
 
 
 # If executed as main, call main
