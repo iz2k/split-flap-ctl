@@ -1,6 +1,8 @@
 import os
 import shutil
 import socket
+import subprocess
+import sys
 import urllib
 from time import strftime, gmtime
 
@@ -15,7 +17,7 @@ class osInfo:
         ip = self.getIP()
 
         # Get internet connection status
-        internet = self.getInternet()
+        internet = self.getInternetCommandLine()
 
         # Get FS space
         stat = shutil.disk_usage(os.getcwd())
@@ -61,3 +63,21 @@ class osInfo:
     def getTimeZone(self):
         tdiff = strftime("%z", gmtime())
         return str(get_localzone()) + ' (' + tdiff[:3] + ':' + tdiff[3:] + ')'
+
+    def getInternetCommandLine(self):
+        if (sys.platform == 'win32'):
+            ping_cmd = 'ping -n 1 8.8.8.8'
+            cmd = subprocess.Popen(ping_cmd.split(), stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+            myStdout = cmd.stdout.read()
+            if "TTL=" in str(myStdout):
+                return True
+            else:
+                return False
+        else:
+            ping_cmd = 'ping -c 1 8.8.8.8'
+            cmd = subprocess.Popen(ping_cmd.split(), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            cmd.communicate()
+            if cmd.returncode == 0:
+                return True
+            else:
+                return False
