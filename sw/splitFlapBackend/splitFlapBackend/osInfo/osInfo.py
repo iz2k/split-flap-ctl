@@ -52,17 +52,17 @@ class osInfo:
             s.close()
         return IP
 
-    def getInternet(self, url='http://google.com', timeout=3):
+    def getTimeZone(self):
+        tdiff = strftime("%z", gmtime())
+        return str(get_localzone()) + ' (' + tdiff[:3] + ':' + tdiff[3:] + ')'
+
+    def getInternetUrllib(self, url='http://google.com', timeout=3):
         try:
             urllib.request.urlopen(url, timeout=timeout)
             return True
         except Exception as e:
             print(e)
             return False
-
-    def getTimeZone(self):
-        tdiff = strftime("%z", gmtime())
-        return str(get_localzone()) + ' (' + tdiff[:3] + ':' + tdiff[3:] + ')'
 
     def getInternetCommandLine(self):
         if (sys.platform == 'win32'):
