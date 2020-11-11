@@ -1,7 +1,8 @@
-<div class="container py-2 w100 clockContainer" >
-  <div class="card border-dark w100">
+<div class="container w100 clockContainer" >
+
+  <div class="card border-dark w100 my-2">
     <div class="text-center bg-cardtitle pt-2">
-      <h4>Clock configuration</h4>
+      <h4>DateTime</h4>
     </div>
 
     <div class="card-body w100" style="height: 70px" *ngIf="clockTime != undefined"  [formGroup]="tzFormGroup">
@@ -15,8 +16,23 @@
               [customPlaceholderText]="'Timezone'">
             </ng-moment-timezone-picker>
     </div>
+  </div>
+
+  <div class="card border-dark w100 my-2">
+    <div class="text-center bg-cardtitle pt-2 w100">
+        <h4>Clock</h4>
+    </div>
     <div class="card-body w100  align-content-center" *ngIf="clockTime != undefined">
       <table class="w100">
+        <tr *ngIf="calibrationMode">
+          <td width="*" class="align-content-center"></td>
+          <td width="550px" class="text-center text-danger">
+            <h4>Clock in calibration mode!!</h4>
+          </td>
+          <td  width="*" class="align-content-center"></td>
+
+        </tr>
+        <tr>
           <td width="*" class="align-content-center"></td>
           <td width="550px" class="align-content-center">
             <JSB-flipclock
@@ -31,7 +47,28 @@
           </td>
           <td  width="*" class="align-content-center"></td>
 
+        </tr>
+
       </table>
+    </div>
+  </div>
+
+  <div class="card border-dark w100 my-2">
+    <div class="text-center bg-cardtitle pt-2 w100">
+      <div class="column w10">&nbsp;</div>
+      <div class="column w80">
+        <h4>Clock calibration</h4>
+      </div>
+      <div class="column w10">
+        <mat-slide-toggle (toggleChange)="applyCalibrationMode(!calibrationMode)"
+                    [checked]="calibrationMode">
+        </mat-slide-toggle>
+      </div>
+    </div>
+
+    <div class="card-body w100" style="height: 70px"  *ngIf="calibrationMode">
+      <app-cal-split-flap [type]="'hh'"></app-cal-split-flap>
+      <app-cal-split-flap [type]="'mm'"></app-cal-split-flap>
     </div>
   </div>
 </div>

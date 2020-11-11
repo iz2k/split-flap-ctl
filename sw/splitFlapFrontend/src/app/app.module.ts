@@ -20,6 +20,11 @@ import {MatInputModule } from '@angular/material/input';
 import {JSBAngularFlipClockModule} from 'jsb-angular-flip-clock';
 import {MatNativeDateModule} from '@angular/material/core';
 import {MomentTimezonePickerModule} from 'moment-timezone-picker';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatSelectModule} from '@angular/material/select';
+import {MatButtonModule} from '@angular/material/button';
+import { CalSplitFlapComponent } from './clock/cal-split-flap/cal-split-flap.component';
 
 
 @NgModule({
@@ -29,7 +34,8 @@ import {MomentTimezonePickerModule} from 'moment-timezone-picker';
     HeaderComponent,
     FooterComponent,
     WeatherComponent,
-    DashboardComponent
+    DashboardComponent,
+    CalSplitFlapComponent
   ],
   imports: [
     BrowserModule,
@@ -43,6 +49,10 @@ import {MomentTimezonePickerModule} from 'moment-timezone-picker';
     MatInputModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatCheckboxModule,
+    MatSlideToggleModule,
     ReactiveFormsModule,
     MomentTimezonePickerModule,
     FormsModule
