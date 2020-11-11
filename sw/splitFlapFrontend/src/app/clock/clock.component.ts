@@ -22,7 +22,7 @@ export class ClockComponent implements OnInit {
   tzFormGroup: FormGroup;
   timezone = new FormControl('');
 
-  calibrationMode = false;
+  calibrationMode = true;
 
   constructor(private backend: BackendService) { }
 
@@ -40,8 +40,8 @@ export class ClockComponent implements OnInit {
     this.updateFlipClockWidget();
     setInterval
       (_ => {
+        this.incrementClockTime();
         if (!this.calibrationMode) {
-          this.incrementClockTime();
           this.updateFlipClockWidget();
         }
       }, 1000);

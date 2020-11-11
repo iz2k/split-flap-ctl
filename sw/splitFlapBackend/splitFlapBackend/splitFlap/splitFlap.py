@@ -1,16 +1,16 @@
+from smbus2 import SMBus
 from termcolor import colored
-import smbus2
 
 SMBUS_REGS = {
-    'FW_VERSION': {'address': 1, 'type': 'msp43xFwVersion', 'len' : 2},
-    'SMB_DESIRED_DIGIT': {'address': 2, 'type': int, 'len' : 1},
-    'SMB_CURRENT_DIGIT': {'address': 3, 'type': int, 'len' : 1},
-    'SMB_HALL_FIND': {'address': 4, 'type': int, 'len' : 1},
-    'SMB_HALL_THRESHOLD': {'address': 5, 'type': int, 'len' : 2},
-    'SMB_HALL_DIGIT': {'address': 6, 'type': int, 'len' : 1},
-    'SMB_IR_THRESHOLD': {'address': 7, 'type': int, 'len' : 2},
-    'SMB_IR_TURNON_TIME': {'address': 8, 'type': int, 'len' : 2},
-    'SMB_IR_DEBOUNCE_TIME': {'address': 9, 'type': int, 'len' : 2},
+    'Firmware version': {'address': 1, 'type': 'msp43xFwVersion', 'len' : 2},
+    'Desired Digit': {'address': 2, 'type': int, 'len' : 1},
+    'Current Digit': {'address': 3, 'type': int, 'len' : 1},
+    'Sync trigger': {'address': 4, 'type': int, 'len' : 1},
+    'Sync Threshold': {'address': 5, 'type': int, 'len' : 2},
+    'Sync Digit': {'address': 6, 'type': int, 'len' : 1},
+    'IR Threshold': {'address': 7, 'type': int, 'len' : 2},
+    'IR turn-on': {'address': 8, 'type': int, 'len' : 2},
+    'IR debounce': {'address': 9, 'type': int, 'len' : 2},
 }
 
 SMBUS_OPS = {
@@ -23,7 +23,7 @@ SMBUS_OPS = {
 class SplitFlap:
 
     def __init__(self, i2cAddress, nFlaps, SMBusChannel=1):
-        self.bus = smbus2.SMBus(SMBusChannel)
+        self.bus = SMBus(SMBusChannel)
         self.i2cAddress = i2cAddress
         self.nFlaps = nFlaps
 
@@ -43,9 +43,9 @@ class SplitFlap:
 
     def show_reg(self, reg):
         raw = self.read_register(reg)
-        if SMBUS_REGS[reg]['type'] is int:
+        if SMBUS_REGS[reg]['type'] == int:
             return str(raw)
-        if SMBUS_REGS[reg]['type'] is 'msp43xFwVersion':
+        if SMBUS_REGS[reg]['type'] == 'msp43xFwVersion':
             major = raw >> 8
             minor = raw & 0xFF
             return str(major) + '.' + str(minor)
@@ -53,10 +53,10 @@ class SplitFlap:
             return SMBUS_REGS[reg]['type'][str(raw)]
 
     def getDigit(self):
-        return self.read_register('SMB_DESIRED_DIGIT')
+        return self.read_register('Desired Digit')
 
     def setDigit(self, val):
-        self.write_register('SMB_DESIRED_DIGIT', val)
+        self.write_register('Desired Digit', val)
 
     def incDigit(self):
         val = self.getDigit()

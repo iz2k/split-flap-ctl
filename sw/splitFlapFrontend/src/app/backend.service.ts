@@ -20,4 +20,12 @@ export class BackendService extends Socket {
   getTime(): Observable<any> {
     return this.http.get<any>(this.urlEndPoint + '/get-time');
   }
+
+  getStatus(type): Observable<any> {
+    return this.http.get<any>(this.urlEndPoint + '/get-status?type=' + type);
+  }
+
+  setParameter(type, parameter, value): Observable<any> {
+    return this.http.get<any>(this.urlEndPoint + '/set-parameter?type=' + type + '&parameter=' + parameter + '&value=' + value);
+  }
 }

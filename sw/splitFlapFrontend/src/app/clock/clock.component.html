@@ -66,9 +66,13 @@
       </div>
     </div>
 
-    <div class="card-body w100" style="height: 70px"  *ngIf="calibrationMode">
-      <app-cal-split-flap [type]="'hh'"></app-cal-split-flap>
-      <app-cal-split-flap [type]="'mm'"></app-cal-split-flap>
+    <div class="card-body w100" *ngIf="calibrationMode">
+      <div class="column w50">&nbsp;
+        <app-cal-split-flap [type]="'hh'"></app-cal-split-flap>
+      </div>
+      <div class="column w50">&nbsp;
+        <app-cal-split-flap [type]="'mm'"></app-cal-split-flap>
+      </div>
     </div>
   </div>
 </div>
