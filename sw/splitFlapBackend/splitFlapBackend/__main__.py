@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 import argparse
 
+from splitFlapBackend.clock.clockThread import clockThread
 from splitFlapBackend.osInfo.osInfoThread import osInfoThread
-from splitFlapBackend.tools.jsontools import prettyJson
 from splitFlapBackend.webServer.webServer import define_webserver
 
 
@@ -19,16 +19,19 @@ def main():
 
     # Define threads
     osinfoTh = osInfoThread()
+    clockTh = clockThread()
 
     # Define WebServer
     [app, sio] = define_webserver(osinfoTh.osInfoCtl, debug=debug)
 
     # Pass SIO to threads
     osinfoTh.set_sio(sio)
+    clockTh.set_sio(sio)
 
     try:
         # Start threads
         osinfoTh.start()
+        clockTh.start()
 
         # Start Webserver (blocks this thread until server quits)
         print('Starting Web Server:')
@@ -38,6 +41,7 @@ def main():
 
         # When server ends, stop threads
         osinfoTh.stop()
+        clockTh.stop()
 
         # Print Goodby msg
         print('Exiting R102-DB-CTL...')
@@ -45,6 +49,7 @@ def main():
     except KeyboardInterrupt:
         # Stop threads
         osinfoTh.stop()
+        clockTh.stop()
 
 
 # If executed as main, call main

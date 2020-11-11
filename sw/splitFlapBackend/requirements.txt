@@ -3,3 +3,5 @@ flask_socketio
 flask_cors
 eventlet
 babel
+smbus2
+termcolor
