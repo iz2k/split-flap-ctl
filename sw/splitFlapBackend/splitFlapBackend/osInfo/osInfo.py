@@ -4,9 +4,12 @@ import socket
 import subprocess
 import sys
 import urllib
+from datetime import datetime
 from time import strftime, gmtime
 
 from babel.localtime import get_localzone
+
+from splitFlapBackend.tools.jsontools import prettyJson
 
 
 class osInfo:
@@ -25,7 +28,7 @@ class osInfo:
         fs_free_GB = "%.2f" % (stat.free/1024/1024/1024)
 
         # Get TimeZone
-        timezone = self.getTimeZone()
+        datetime = self.getDateTime()
 
         hostinfo =  {
             'hostname' : hostname,
@@ -33,7 +36,7 @@ class osInfo:
             'internet' : internet,
             'fs_total_GB' : fs_total_GB,
             'fs_free_GB' : fs_free_GB,
-            'timezone' : timezone
+            'datetime' : datetime
         }
         return hostinfo
 
@@ -52,10 +55,17 @@ class osInfo:
             s.close()
         return IP
 
-    def getTimeZone(self):
-        tdiff = strftime("%z", gmtime())
-        #return str(get_localzone()) + ' (' + tdiff[:3] + ':' + tdiff[3:] + ')'
-        return str(get_localzone())
+    def getDateTime(self):
+        now = datetime.now()
+        timezone = str(get_localzone())
+        return {'year': now.year,
+                           'month': now.month,
+                           'month': now.month,
+                           'day': now.day,
+                           'hour': now.hour,
+                           'minute': now.minute,
+                           'second': now.second,
+                           'timezone': timezone}
 
     def getInternetUrllib(self, url='http://google.com', timeout=3):
         try:
