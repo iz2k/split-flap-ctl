@@ -5,21 +5,19 @@ from threading import Thread
 
 from flask_socketio import SocketIO
 
-from splitFlapBackend.osInfo.osInfo import osInfo
-from splitFlapBackend.tools.jsontools import prettyJson
+from splitFlapBackend.tools.jsonTools import prettyJson
+from splitFlapBackend.tools.osTools import getDiskUsage
+from splitFlapBackend.tools.ipTools import getHostname, getIP, getInternetCommandLine
+from splitFlapBackend.tools.timeTools import getDateTime
 
 
 class osInfoThread(Thread):
 
     queue = Queue()
     sio : SocketIO = None
-    osInfoCtl = None
-    report = None
 
     def __init__(self):
         Thread.__init__(self)
-        self.osInfoCtl = osInfo()
-        self.report = self.osInfoCtl.getReport()
 
     def start(self):
         self.emit()
@@ -51,11 +49,33 @@ class osInfoThread(Thread):
             next_update = last_update + timedelta(0,10)
             if now > next_update:
                 last_update = now
-                self.report = self.osInfoCtl.getReport()
                 self.emit()
 
             time.sleep(0.01)
 
     def emit(self):
-        print('osInfo: ' + str(self.report))
-        self.sio.emit('osInfo', prettyJson(self.report))
+        self.sio.emit('osInfo', prettyJson(getReport()))
+
+def getReport():
+    # Get hostname and IP
+    hostname = getHostname()
+    ip = getIP()
+
+    # Get internet connection status
+    internet = getInternetCommandLine()
+
+    # Get FS space
+    [total_GB, free_GB] = getDiskUsage()
+
+    # Get TimeZone
+    datetime = getDateTime()
+
+    hostinfo =  {
+        'hostname' : hostname,
+        'ip' : ip,
+        'internet' : internet,
+        'fs_total_GB' : total_GB,
+        'fs_free_GB' : free_GB,
+        'datetime' : datetime
+    }
+    return hostinfo

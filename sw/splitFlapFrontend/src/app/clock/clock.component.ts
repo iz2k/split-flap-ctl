@@ -22,22 +22,25 @@ export class ClockComponent implements OnInit {
   tzFormGroup: FormGroup;
   timezone = new FormControl('');
 
-  calibrationMode = true;
+  calibrationMode = false;
 
   constructor(private backend: BackendService) { }
 
 
   ngOnInit(): void {
-    this.backend.getTime().subscribe(json => this.updateClockTime(json));
-    this.tzFormGroup = new FormGroup({
-    timezone: this.timezone
-  });
+    this.backend.getTime().subscribe(json => {
+      this.updateClockTime(json);
+      this.timezone.valueChanges.subscribe(tz => this.timezoneChange(tz));
+    });
+    this.backend.getMode().subscribe(json => this.updateMode(json));
+    this.tzFormGroup = new FormGroup(
+      {
+                timezone: this.timezone
+              });
+    this.periodicEvent();
   }
 
-  updateClockTime(json): void {
-    this.clockTime = json;
-    this.timezone.setValue(this.clockTime.timezone);
-    this.updateFlipClockWidget();
+  periodicEvent(): void {
     setInterval
       (_ => {
         this.incrementClockTime();
@@ -45,6 +48,23 @@ export class ClockComponent implements OnInit {
           this.updateFlipClockWidget();
         }
       }, 1000);
+  }
+
+  updateClockTime(json): void {
+    console.log(json);
+    this.clockTime = json;
+    if (this.timezone.value.nameValue !== this.clockTime.timezone) {
+      this.timezone.setValue(this.clockTime.timezone);
+    }
+    this.updateFlipClockWidget();
+  }
+
+  updateMode(json): void {
+    if (json.mode === 'clock') {
+      this.calibrationMode = false;
+    }else{
+      this.calibrationMode = true;
+    }
   }
 
   updateFlipClockWidget(): void {
@@ -74,7 +94,20 @@ export class ClockComponent implements OnInit {
   }
 
   applyCalibrationMode(calibrationMode): void {
-    this.calibrationMode = calibrationMode;
-    console.log(this.calibrationMode);
+    if (calibrationMode) {
+      this.backend.setMode('calibration').subscribe(json => {this.updateMode(json); });
+    }else {
+      this.backend.setMode('clock').subscribe(json => {this.updateMode(json); });
+    }
   }
+
+  timezoneChange(tz): void {
+    console.log('timezone changed');
+    console.log(tz);
+    this.backend.setTimeZone(tz).subscribe(ans => {
+      this.backend.getTime().subscribe(json => this.updateClockTime(json));
+      console.log(ans);
+    });
+  }
+
 }

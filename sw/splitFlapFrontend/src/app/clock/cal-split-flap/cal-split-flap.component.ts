@@ -16,6 +16,10 @@ export class CalSplitFlapComponent implements OnInit {
   constructor(private backend: BackendService) { }
 
   ngOnInit(): void {
+    this.updateStatus();
+  }
+
+  updateStatus(): void {
     this.backend.getStatus(this.type).subscribe(json =>
     {
       this.status = json;
@@ -31,6 +35,8 @@ export class CalSplitFlapComponent implements OnInit {
     this.backend.setParameter(this.type, parameter, value).subscribe(ans =>
     {
       console.log(ans);
+      this.updateStatus();
     });
   }
+
 }

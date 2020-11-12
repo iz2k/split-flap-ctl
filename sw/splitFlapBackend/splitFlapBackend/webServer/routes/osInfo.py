@@ -1,17 +1,29 @@
+import pytz
+from flask import Flask, request
 from flask_socketio import SocketIO
 
-from splitFlapBackend.osInfo.osInfo import osInfo
-from splitFlapBackend.tools.jsontools import prettyJson
+from splitFlapBackend.clock.clock import clock
+from splitFlapBackend.osInfo.osInfoThread import getReport
+from splitFlapBackend.tools.jsonTools import prettyJson
+from splitFlapBackend.tools.timeTools import setTimeZone
 
 
-def defineOsInfoRoutes(sio : SocketIO, osinfo: osInfo):
+def defineOsInfoRoutes(app : Flask, sio : SocketIO, clk : clock):
 
     @sio.on('connect')
     def onconnect_event():
         print('Client connected!')
-        sio.emit('osInfo', prettyJson(osinfo.getReport()))
+        sio.emit('osInfo', prettyJson(getReport()))
 
     @sio.on('disconnect')
     def ondisconnect_event():
         print('Client disconnected!')
 
+
+    @app.route('/set-timezone', methods=['POST'])
+    def setTimezone():
+        content = request.get_json(silent=True)
+        if (content != None):
+            setTimeZone(content['nameValue'])
+            clk.timezone = pytz.timezone(content['nameValue'])
+        return prettyJson({'status' : 'Timezone modified!'})

@@ -3,15 +3,16 @@ import datetime
 from flask import Flask, request
 from flask_socketio import SocketIO
 
-from splitFlapBackend.osInfo.osInfo import osInfo
-from splitFlapBackend.tools.jsontools import prettyJson
+from splitFlapBackend.clock.clock import clock
+from splitFlapBackend.tools.jsonTools import prettyJson
+from splitFlapBackend.tools.timeTools import getDateTime
 
 
-def defineClockRoutes(app : Flask, sio : SocketIO, osinfo : osInfo):
+def defineClockRoutes(app : Flask, sio : SocketIO, clk : clock):
 
     @app.route('/get-time', methods=['GET'])
     def setPhase():
-        return prettyJson(osinfo.getDateTime())
+        return prettyJson(getDateTime())
 
     # /url?arg1=xxxx&arg2=yyy
     @app.route('/get-status', methods=['GET'])
@@ -19,26 +20,30 @@ def defineClockRoutes(app : Flask, sio : SocketIO, osinfo : osInfo):
         try:
             type = request.args.get('type')
             if (type == 'hh'):
-                return prettyJson({
-                    'Desired digit': 5,
-                    'Current digit': 4,
-                    'Sync threshold': 50,
-                    'Sync digit': 15,
-                    'IR threshold': 100,
-                    'IR turn-on': 10,
-                    'IR debounce': 100
-                })
+                return prettyJson(clk.hh.getStatus())
             if (type == 'mm'):
-                return prettyJson({
-                    'Desired digit': 42,
-                    'Current digit': 31,
-                    'Sync threshold': 75,
-                    'Sync digit': 31,
-                    'IR threshold': 150,
-                    'IR turn-on': 8,
-                    'IR debounce': 120
-                })
+                return prettyJson(clk.mm.getStatus())
             return 'Invalid type'
+        except Exception as e:
+            print(e)
+            return 'Invalid parameters'
+
+    # /url?arg1=xxxx&arg2=yyy
+    @app.route('/get-mode', methods=['GET'])
+    def getMode():
+            return prettyJson({
+                'mode' : clk.mode
+            })
+
+    # /url?arg1=xxxx&arg2=yyy
+    @app.route('/set-mode', methods=['GET'])
+    def setMode():
+        try:
+            mode = request.args.get('mode')
+            clk.mode = mode
+            return prettyJson({
+                'mode' : clk.mode
+            })
         except Exception as e:
             print(e)
             return 'Invalid parameters'
@@ -49,10 +54,14 @@ def defineClockRoutes(app : Flask, sio : SocketIO, osinfo : osInfo):
         try:
             type = request.args.get('type')
             parameter = request.args.get('parameter')
-            value = request.args.get('value')
-            text = 'SplitFlap ' + type + ': Setting parameter ' + parameter + ' to ' + value
-            print(text)
-            return prettyJson({'status':text})
+            value = int(request.args.get('value'))
+            if (type == 'hh'):
+                clk.hh.setParameter(parameter, value)
+            elif (type == 'mm'):
+                clk.mm.setParameter(parameter, value)
+            else:
+                return 'Invalid type'
+            return prettyJson({'status': 'ok'})
         except Exception as e:
             print(e)
             return 'Invalid parameters'

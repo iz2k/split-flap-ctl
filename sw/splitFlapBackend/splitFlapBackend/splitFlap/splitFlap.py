@@ -20,6 +20,11 @@ SMBUS_OPS = {
     'SMB_OP_MASK': 0b11000000
 }
 
+SMBUS_ADDR = {
+    0x16 : 'hh',
+    0x17 : 'mm'
+}
+
 class SplitFlap:
 
     def __init__(self, i2cAddress, nFlaps, SMBusChannel=1):
@@ -64,3 +69,13 @@ class SplitFlap:
         if (newval >= self.nFlaps):
             newval = 0
         self.setDigit(newval)
+
+    def getStatus(self):
+        status = {}
+        for reg in SMBUS_REGS:
+            status[reg] = self.read_register(reg)
+        return status
+
+    def setParameter(self, parameter, value):
+        print('[' + SMBUS_ADDR[self.i2cAddress] + '] Setting parameter \'' + parameter + '\' to \'' + str(value) + '\'')
+        self.write_register(parameter, value)

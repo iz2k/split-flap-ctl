@@ -1,11 +1,12 @@
 import time
-from datetime import datetime, timedelta
+from datetime import timedelta
 from queue import Queue
 from threading import Thread
 
 from flask_socketio import SocketIO
 
 from splitFlapBackend.clock.clock import clock
+from splitFlapBackend.tools.timeTools import getTimeZoneAwareNow
 
 
 class clockThread(Thread):
@@ -25,7 +26,7 @@ class clockThread(Thread):
 
     def run(self):
 
-        last_update = datetime.now()
+        last_update = getTimeZoneAwareNow(self.clock.timezone)
 
         # Main loop
         run_app=True
@@ -36,11 +37,12 @@ class clockThread(Thread):
                 if db_os_q_msg == 'quit':
                     run_app=False
 
-            now = datetime.now()
-            next_update = last_update + timedelta(0, 1)
-            if now > next_update:
-                last_update = now
-                self.clock.hh.setDigit(now.hour)
-                self.clock.mm.setDigit(now.minute)
+            if (self.clock.mode == 'clock'):
+                now = getTimeZoneAwareNow(self.clock.timezone)
+                next_update = last_update + timedelta(0, 1)
+                if now > next_update:
+                    last_update = now
+                    self.clock.hh.setDigit(now.hour)
+                    self.clock.mm.setDigit(now.minute)
 
-            time.sleep(0.01)
+            time.sleep(1)

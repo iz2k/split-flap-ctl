@@ -1,9 +1,10 @@
-from splitFlapBackend.osInfo.osInfo import osInfo
+import clock as clock
+
 from splitFlapBackend.webServer.routes.clock import defineClockRoutes
 from splitFlapBackend.webServer.routes.osInfo import defineOsInfoRoutes
 
 
-def define_webserver(osinfo : osInfo, debug):
+def define_webserver(clk : clock, debug):
     if debug == False:
         import eventlet
 
@@ -26,8 +27,8 @@ def define_webserver(osinfo : osInfo, debug):
     # Enable CORS to SocketIO
     sio.init_app(app, cors_allowed_origins="*")
 
-    defineClockRoutes(app, sio, osinfo)
+    defineClockRoutes(app, sio, clk)
 
-    defineOsInfoRoutes(sio , osinfo)
+    defineOsInfoRoutes(app, sio , clk)
 
     return [app, sio]

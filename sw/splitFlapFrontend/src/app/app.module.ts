@@ -25,6 +25,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatSelectModule} from '@angular/material/select';
 import {MatButtonModule} from '@angular/material/button';
 import { CalSplitFlapComponent } from './clock/cal-split-flap/cal-split-flap.component';
+import {MatIconModule} from '@angular/material/icon';
 
 
 @NgModule({
@@ -53,6 +54,7 @@ import { CalSplitFlapComponent } from './clock/cal-split-flap/cal-split-flap.com
     MatButtonModule,
     MatCheckboxModule,
     MatSlideToggleModule,
+    MatIconModule,
     ReactiveFormsModule,
     MomentTimezonePickerModule,
     FormsModule
