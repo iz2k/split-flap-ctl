@@ -4,12 +4,14 @@ import argparse
 from splitFlapBackend.clock.clockThread import clockThread
 from splitFlapBackend.osInfo.osInfoThread import osInfoThread
 from splitFlapBackend.tools.ipTools import getHostname, getIP
-from splitFlapBackend.webServer.webServer import define_webserver
+from splitFlapBackend.weatherStation.weatherStation import weatherStation
+from splitFlapBackend.webServer.webServer import define_webserver, define_webroutes
 
 
 def main():
 
     debug=False
+    async_mode='eventlet' # threading | eventlet
 
     # Parse arguments
     parser = argparse.ArgumentParser(description="iz2k's split-clock controller.")
@@ -21,9 +23,12 @@ def main():
     # Define threads
     osinfoTh = osInfoThread()
     clockTh = clockThread()
+    weather = weatherStation()
 
     # Define WebServer
-    [app, sio] = define_webserver(clockTh.clock, debug=debug)
+    [app, sio] = define_webserver(async_mode=async_mode)
+
+    define_webroutes(app, sio, clockTh.clock, weather)
 
     # Pass SIO to threads
     osinfoTh.set_sio(sio)

@@ -18,7 +18,10 @@ export class WeatherComponent implements OnInit {
 
   date = new FormControl(new Date());
   cityName: any;
+  geocodeAPI: any;
   geocodeResult: any;
+  configCityName: any;
+  configGeocodeAPI: any;
   location: any;
   map: any;
   private zoom: number;
@@ -26,9 +29,8 @@ export class WeatherComponent implements OnInit {
   constructor(private backend: BackendService, private geocode: GeocodeService) { }
 
   ngOnInit(): void {
-    this.backend.getGeocodeApi().subscribe(json => {
-      this.geocode.setApi(json.api);
-      console.log('Geocode API retrieved');
+    this.backend.getWeatherConfig().subscribe(json => {
+      this.parseWeatherConfig(json);
     });
     this.map = new Map({
       controls: [],
@@ -43,6 +45,15 @@ export class WeatherComponent implements OnInit {
         zoom: 1
       })
     });
+  }
+
+  parseWeatherConfig(json): void {
+    this.geocodeAPI = json.geocodeApi;
+    this.configGeocodeAPI = this.geocodeAPI;
+    this.geocode.setApi(this.geocodeAPI);
+    this.cityName = json.location;
+    this.configCityName = this.cityName;
+    this.searchCity();
   }
 
   searchCity(): void {
@@ -69,4 +80,31 @@ export class WeatherComponent implements OnInit {
     });
   }
 
+  saveLocation(): void {
+    /*this.backend.setWeatherParameter('location', this.location.properties.name).subscribe(json =>
+    {
+      this.parseWeatherConfig(json);
+    });
+    this.backend.setWeatherParameter('coordinates', this.location.geometry.coordinates).subscribe(json =>
+    {
+      this.parseWeatherConfig(json);
+    });*/
+    this.backend.setWeatherParameters(
+      [
+        {parameter: 'location', value: this.location.properties.name},
+        {parameter: 'longitude', value: this.location.geometry.coordinates[0]},
+        {parameter: 'latitude', value: this.location.geometry.coordinates[1]}
+      ]).subscribe(json =>
+    {
+      this.parseWeatherConfig(json);
+    });
+
+  }
+
+  saveGeocodeApi(): void {
+    this.backend.setWeatherParameter('geocodeApi', this.geocodeAPI).subscribe(json =>
+    {
+      this.parseWeatherConfig(json);
+    });
+  }
 }

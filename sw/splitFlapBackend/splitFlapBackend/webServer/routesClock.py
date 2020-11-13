@@ -1,6 +1,5 @@
-import datetime
-
-from flask import Flask, request
+from flask import Flask
+from flask import request as flask_request
 from flask_socketio import SocketIO
 
 from splitFlapBackend.clock.clock import clock
@@ -18,7 +17,7 @@ def defineClockRoutes(app : Flask, sio : SocketIO, clk : clock):
     @app.route('/get-status', methods=['GET'])
     def getStatus():
         try:
-            type = request.args.get('type')
+            type = flask_request.args.get('type')
             if (type == 'hh'):
                 return prettyJson(clk.hh.getStatus())
             if (type == 'mm'):
@@ -39,7 +38,7 @@ def defineClockRoutes(app : Flask, sio : SocketIO, clk : clock):
     @app.route('/set-mode', methods=['GET'])
     def setMode():
         try:
-            mode = request.args.get('mode')
+            mode = flask_request.args.get('mode')
             clk.mode = mode
             return prettyJson({
                 'mode' : clk.mode
@@ -52,9 +51,9 @@ def defineClockRoutes(app : Flask, sio : SocketIO, clk : clock):
     @app.route('/set-parameter', methods=['GET'])
     def setParameter():
         try:
-            type = request.args.get('type')
-            parameter = request.args.get('parameter')
-            value = int(request.args.get('value'))
+            type = flask_request.args.get('type')
+            parameter = flask_request.args.get('parameter')
+            value = int(flask_request.args.get('value'))
             if (type == 'hh'):
                 clk.hh.setParameter(parameter, value)
             elif (type == 'mm'):

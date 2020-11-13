@@ -1,5 +1,6 @@
 import pytz
-from flask import Flask, request
+from flask import Flask
+from flask import request as flask_request
 from flask_socketio import SocketIO
 
 from splitFlapBackend.clock.clock import clock
@@ -22,7 +23,7 @@ def defineOsInfoRoutes(app : Flask, sio : SocketIO, clk : clock):
 
     @app.route('/set-timezone', methods=['POST'])
     def setTimezone():
-        content = request.get_json(silent=True)
+        content = flask_request.get_json(silent=True)
         if (content != None):
             setTimeZone(content['nameValue'])
             clk.timezone = pytz.timezone(content['nameValue'])

@@ -46,7 +46,18 @@ export class BackendService extends Socket {
       });
   }
 
-  getGeocodeApi(): Observable<any> {
-    return this.http.get<any>(this.urlEndPoint + '/get-geocodeapi');
+  getWeatherConfig(): Observable<any> {
+    return this.http.get<any>(this.urlEndPoint + '/get-weather-config');
   }
+
+  setWeatherParameter(parameter, value): Observable<any> {
+    return this.http.get<any>(this.urlEndPoint + '/set-weather-config?' + parameter + '=' + value);
+  }
+
+  setWeatherParameters(arglist): Observable<any> {
+    let paramsString = '';
+    arglist.forEach(arg => paramsString = paramsString + arg.parameter.toString() + '=' +  arg.value.toString() + '&');
+    return this.http.get<any>(this.urlEndPoint + '/set-weather-config?' + paramsString);
+  }
+
 }
