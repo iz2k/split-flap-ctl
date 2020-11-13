@@ -24,6 +24,7 @@ def getDateTime():
             'timezone': str(timezone)}
 
 def setTimeZone(timezone):
-    cmd = 'sudo raspi-config nonint do_change_timezone ' + timezone
+    #cmd = 'sudo raspi-config nonint do_change_timezone ' + timezone
+    cmd = 'sudo timedatectl set-timezone ' + timezone
     subprocess.run(cmd.split(), capture_output=True, text=True)
     print('Timezone set to: ' + str(timezone) + ' (' + str(getTimeZoneAwareNow(pytz.timezone(timezone))) + ')')

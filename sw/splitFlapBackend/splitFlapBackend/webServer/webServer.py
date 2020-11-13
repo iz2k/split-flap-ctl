@@ -1,7 +1,8 @@
 import clock as clock
 
-from splitFlapBackend.webServer.routes.clock import defineClockRoutes
-from splitFlapBackend.webServer.routes.osInfo import defineOsInfoRoutes
+from splitFlapBackend.webServer.routesClock import defineClockRoutes
+from splitFlapBackend.webServer.routesOsInfo import defineOsInfoRoutes
+from splitFlapBackend.webServer.routesWeather import defineWeatherRoutes
 
 
 def define_webserver(clk : clock, debug):
@@ -28,7 +29,7 @@ def define_webserver(clk : clock, debug):
     sio.init_app(app, cors_allowed_origins="*")
 
     defineClockRoutes(app, sio, clk)
-
+    defineWeatherRoutes(app, sio, clk)
     defineOsInfoRoutes(app, sio , clk)
 
     return [app, sio]

@@ -45,4 +45,8 @@ export class BackendService extends Socket {
         })
       });
   }
+
+  getGeocodeApi(): Observable<any> {
+    return this.http.get<any>(this.urlEndPoint + '/get-geocodeapi');
+  }
 }
