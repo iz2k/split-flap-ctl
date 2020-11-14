@@ -51,7 +51,7 @@ class osInfoThread(Thread):
                 last_update = now
                 self.emit()
 
-            time.sleep(0.01)
+            time.sleep(0.1)
 
     def emit(self):
         self.sio.emit('osInfo', prettyJson(getReport()))

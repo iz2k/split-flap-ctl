@@ -3,17 +3,14 @@ from datetime import timedelta
 from queue import Queue
 from threading import Thread
 
-from flask_socketio import SocketIO
-
-from splitFlapBackend.clock.clock import Clock
 from splitFlapBackend.tools.timeTools import getTimeZoneAwareNow
+from splitFlapBackend.weatherStation.weatherStation import WeatherStation
 
 
-class clockThread(Thread):
+class WeatherStationThread(Thread):
 
     queue = Queue()
-    sio : SocketIO = None
-    clock = Clock()
+    weatherStation = WeatherStation()
 
     def stop(self):
         if self.is_alive():
@@ -21,11 +18,9 @@ class clockThread(Thread):
             self.join()
             print('thread exit cleanly')
 
-    def set_sio(self, sio : SocketIO):
-        self.sio = sio
-
     def run(self):
 
+        self.report = self.weatherStation.updateWeatherReport()
         last_update = getTimeZoneAwareNow(self.clock.timezone)
 
         # Main loop
@@ -37,12 +32,10 @@ class clockThread(Thread):
                 if db_os_q_msg == 'quit':
                     run_app=False
 
-            if (self.clock.mode == 'clock'):
-                now = getTimeZoneAwareNow(self.clock.timezone)
-                next_update = last_update + timedelta(0, 1)
-                if now > next_update:
-                    last_update = now
-                    self.clock.hh.setDigit(now.hour)
-                    self.clock.mm.setDigit(now.minute)
+            now = getTimeZoneAwareNow(self.clock.timezone)
+            next_update = last_update + timedelta(minutes=15)
+            if now > next_update:
+                last_update = now
+                self.report = self.weatherStation.updateWeatherReport()
 
             time.sleep(1)

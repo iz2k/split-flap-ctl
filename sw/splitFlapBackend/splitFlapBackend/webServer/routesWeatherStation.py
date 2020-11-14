@@ -3,10 +3,10 @@ from flask import request as flask_request
 from flask_socketio import SocketIO
 
 from splitFlapBackend.tools.jsonTools import prettyJson
-from splitFlapBackend.weatherStation.weatherStation import weatherStation
+from splitFlapBackend.weatherStation.weatherStation import WeatherStation
 
 
-def defineWeatherStationRoutes(app : Flask, sio : SocketIO, weather : weatherStation):
+def defineWeatherStationRoutes(app : Flask, sio : SocketIO, weather : WeatherStation):
 
     @app.route('/get-weather-config', methods=['GET'])
     def getWeatherConfig():
@@ -22,6 +22,7 @@ def defineWeatherStationRoutes(app : Flask, sio : SocketIO, weather : weatherSta
                 # Update parameter
                 weather.updateParam(parameter,value)
             weather.printConfig()
+            weather.updateWeatherReport()
             return prettyJson(weather.config)
         except Exception as e:
             print(e)
@@ -29,4 +30,4 @@ def defineWeatherStationRoutes(app : Flask, sio : SocketIO, weather : weatherSta
 
     @app.route('/get-weather', methods=['GET'])
     def getWeather():
-        return prettyJson(weather.getWeatherReport())
+        return prettyJson(weather.report)

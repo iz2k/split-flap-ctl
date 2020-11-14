@@ -1,13 +1,14 @@
+import pytz
 from flask import Flask
 from flask import request as flask_request
 from flask_socketio import SocketIO
 
-from splitFlapBackend.clock.clock import clock
+from splitFlapBackend.clock.clock import Clock
 from splitFlapBackend.tools.jsonTools import prettyJson
-from splitFlapBackend.tools.timeTools import getDateTime
+from splitFlapBackend.tools.timeTools import getDateTime, setTimeZone
 
 
-def defineClockRoutes(app : Flask, sio : SocketIO, clk : clock):
+def defineClockRoutes(app : Flask, sio : SocketIO, clk : Clock):
 
     @app.route('/get-time', methods=['GET'])
     def setPhase():
@@ -64,3 +65,11 @@ def defineClockRoutes(app : Flask, sio : SocketIO, clk : clock):
         except Exception as e:
             print(e)
             return 'Invalid parameters'
+
+    @app.route('/set-timezone', methods=['POST'])
+    def setTimezone():
+        content = flask_request.get_json(silent=True)
+        if (content != None):
+            setTimeZone(content['nameValue'])
+            clk.timezone = pytz.timezone(content['nameValue'])
+        return prettyJson({'status' : 'Timezone modified!'})

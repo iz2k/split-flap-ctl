@@ -1,17 +1,14 @@
 #!/usr/bin/env python3
 import argparse
+import time
 
 from splitFlapBackend.clock.clockThread import clockThread
 from splitFlapBackend.osInfo.osInfoThread import osInfoThread
-from splitFlapBackend.tools.ipTools import getHostname, getIP
-from splitFlapBackend.weatherStation.weatherStation import weatherStation
-from splitFlapBackend.webServer.webServer import define_webserver, define_webroutes
+from splitFlapBackend.weatherStation.weatherStationThread import WeatherStationThread
+from splitFlapBackend.webServer.webServer import webServerThread
 
 
 def main():
-
-    debug=False
-    async_mode='eventlet' # threading | eventlet
 
     # Parse arguments
     parser = argparse.ArgumentParser(description="iz2k's split-clock controller.")
@@ -21,32 +18,29 @@ def main():
     args = parser.parse_args()
 
     # Define threads
-    osinfoTh = osInfoThread()
+    webserverTh = webServerThread(log=False)
+    osInfoTh = osInfoThread()
     clockTh = clockThread()
-    weather = weatherStation()
+    weatherStationThread = WeatherStationThread()
 
-    # Define WebServer
-    [app, sio] = define_webserver(async_mode=async_mode)
-
-    define_webroutes(app, sio, clockTh.clock, weather)
+    webserverTh.define_webroutes(clockTh.clock, weatherStationThread.weatherStation)
 
     # Pass SIO to threads
-    osinfoTh.set_sio(sio)
-    clockTh.set_sio(sio)
+    osInfoTh.set_sio(webserverTh.sio)
+    clockTh.set_sio(webserverTh.sio)
 
     try:
         # Start threads
-        osinfoTh.start()
+        osInfoTh.start()
         clockTh.start()
+        webserverTh.start(port=args.port, host='0.0.0.0', debug=False, use_reloader=False)
 
-        # Start Webserver (blocks this thread until server quits)
-        print('Starting Web Server:')
-        print('\t\thttp://' + getHostname() + ':' + str(args.port))
-        print('\t\thttp://' + getIP() + ':' + str(args.port))
-        sio.run(app, port=args.port, host='0.0.0.0', debug=debug)
+        while (webserverTh.isRunning):
+            time.sleep(0.1)
+
 
         # When server ends, stop threads
-        osinfoTh.stop()
+        osInfoTh.stop()
         clockTh.stop()
 
         # Print Goodby msg
@@ -54,7 +48,7 @@ def main():
 
     except KeyboardInterrupt:
         # Stop threads
-        osinfoTh.stop()
+        osInfoTh.stop()
         clockTh.stop()
 
 

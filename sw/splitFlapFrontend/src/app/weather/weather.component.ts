@@ -24,13 +24,16 @@ export class WeatherComponent implements OnInit {
   configGeocodeAPI: any;
   location: any;
   map: any;
-  private zoom: number;
+  weatherReport: any;
 
   constructor(private backend: BackendService, private geocode: GeocodeService) { }
 
   ngOnInit(): void {
     this.backend.getWeatherConfig().subscribe(json => {
       this.parseWeatherConfig(json);
+    });
+    this.backend.getWeather().subscribe(json => {
+      this.parseWeather(json);
     });
     this.map = new Map({
       controls: [],
@@ -54,6 +57,11 @@ export class WeatherComponent implements OnInit {
     this.cityName = json.location;
     this.configCityName = this.cityName;
     this.searchCity();
+  }
+
+  parseWeather(json): void {
+      this.weatherReport = json;
+      console.log(json);
   }
 
   searchCity(): void {
@@ -81,14 +89,6 @@ export class WeatherComponent implements OnInit {
   }
 
   saveLocation(): void {
-    /*this.backend.setWeatherParameter('location', this.location.properties.name).subscribe(json =>
-    {
-      this.parseWeatherConfig(json);
-    });
-    this.backend.setWeatherParameter('coordinates', this.location.geometry.coordinates).subscribe(json =>
-    {
-      this.parseWeatherConfig(json);
-    });*/
     this.backend.setWeatherParameters(
       [
         {parameter: 'location', value: this.location.properties.name},
@@ -97,6 +97,10 @@ export class WeatherComponent implements OnInit {
       ]).subscribe(json =>
     {
       this.parseWeatherConfig(json);
+
+      this.backend.getWeather().subscribe(reportJson => {
+        this.parseWeather(reportJson);
+      });
     });
 
   }

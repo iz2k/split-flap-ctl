@@ -1,11 +1,10 @@
 import json
-from queue import Queue
+from urllib import request
 
 from splitFlapBackend.tools.jsonTools import writeJsonFile, readJsonFile, prettyJson
 
-from urllib import request
 
-class weatherStation:
+class WeatherStation:
 
     config = {}
     report = {}
@@ -13,7 +12,7 @@ class weatherStation:
     def __init__(self):
         self.loadConfig()
         self.printConfig()
-        self.getWeatherReport()
+        self.updateWeatherReport()
 
     def saveConfig(self):
         writeJsonFile('cfgWeather.json', self.config)
@@ -41,7 +40,7 @@ class weatherStation:
         self.config[param]=value
         self.saveConfig()
 
-    def getWeatherReport(self):
+    def updateWeatherReport(self):
         url = 'https://api.openweathermap.org/data/2.5/onecall?'
         url = url + 'lat=' + self.config['latitude'] + '&'
         url = url + 'lon=' + self.config['longitude'] + '&'
@@ -52,7 +51,7 @@ class weatherStation:
 
         with request.urlopen(url) as con:
             self.report = json.loads(con.read().decode())
-        print('Weather Station Report:')
+        print('Weather Station Report Update:')
         print(prettyJson(
             {
                 'location' : self.config['location'],
